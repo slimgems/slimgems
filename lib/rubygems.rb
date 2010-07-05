@@ -12,7 +12,6 @@ end
 
 require 'rubygems/defaults'
 require 'thread'
-require 'etc'
 
 ##
 # RubyGems is the Ruby standard for publishing and managing third party
