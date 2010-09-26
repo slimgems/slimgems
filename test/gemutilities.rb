@@ -175,6 +175,8 @@ class RubyGemTestCase < MiniTest::Unit::TestCase
   end
 
   def uninstall_gem gem
+    require 'rubygems/uninstaller'
+
     uninstaller = Gem::Uninstaller.new gem.name, :executables => true,
                  :user_install => true
     uninstaller.uninstall
