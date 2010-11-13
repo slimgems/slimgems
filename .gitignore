@@ -1,4 +1,5 @@
 *.gem
 doc
 .yardoc
+*.rbc
 
