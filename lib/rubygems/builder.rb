@@ -6,6 +6,16 @@
 
 require 'rubygems/user_interaction'
 
+begin
+  require 'psych'
+rescue LoadError
+end
+
+Gem.load_yaml
+
+require 'rubygems/package'
+require 'rubygems/security'
+
 ##
 # The Builder class processes RubyGem specification files
 # to produce a .gem file.
@@ -20,9 +30,6 @@ class Gem::Builder
   # spec:: [Gem::Specification] The specification instance
 
   def initialize(spec)
-    require "yaml"
-    require "rubygems/package"
-
     @spec = spec
   end
 
