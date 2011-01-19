@@ -18,7 +18,9 @@ module Gem::InstallUpdateOptions
   def add_install_update_options
     OptionParser.accept Gem::Security::Policy do |value|
       value = Gem::Security::Policies[value]
-      raise OptionParser::InvalidArgument, value if value.nil?
+      valid = Gem::Security::Policies.keys.sort
+      message = "#{value} (#{valid.join ', '} are valid)"
+      raise OptionParser::InvalidArgument, message if value.nil?
       value
     end
 
