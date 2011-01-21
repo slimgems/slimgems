@@ -193,18 +193,18 @@ class TestGemStreamUI < RubyGemTestCase
     @cfg.verbose = true
     reporter = @sui.download_reporter
     reporter.fetch 'a.gem', nil
-    reporter.update 512
+    reporter.update 1024
     reporter.done
-    assert_equal "Fetching: a.gem\rFetching: a.gem (512B)\rFetching: a.gem (512B)\n", @out.string
+    assert_equal "Fetching: a.gem\rFetching: a.gem (1024B)\rFetching: a.gem (1024B)\n", @out.string
   end
 
   def test_verbose_download_reporter_progress_zero_length
     @cfg.verbose = true
     reporter = @sui.download_reporter
     reporter.fetch 'a.gem', 0
-    reporter.update 512
+    reporter.update 1024
     reporter.done
-    assert_equal "Fetching: a.gem\rFetching: a.gem (512B)\rFetching: a.gem (512B)\n", @out.string
+    assert_equal "Fetching: a.gem\rFetching: a.gem (1024B)\rFetching: a.gem (1024B)\n", @out.string
   end
 
   def test_verbose_download_reporter_no_tty
