@@ -24,7 +24,7 @@ class Gem::Commands::UpdateCommand < Gem::Command
 
     add_option('--system',
                'Update the RubyGems system software') do |value, options|
-      options[:system] = value
+      options[:system] = value || Gem::Requirement.default
     end
 
     add_local_remote_options
