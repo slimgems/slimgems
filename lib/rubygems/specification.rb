@@ -516,8 +516,8 @@ class Gem::Specification
 
   def self.normalize_yaml_input(input)
     result = input.respond_to?(:read) ? input.read : input
-    result = "--- " + result unless result =~ /^--- /
-    result
+    result = "--- " + result unless result =~ /\A--- /
+    result.gsub(/ !!null \n/, " \n")
   end
 
   ##
@@ -700,13 +700,17 @@ class Gem::Specification
   end
 
   def to_yaml(opts = {}) # :nodoc:
-    return super if YAML.const_defined?(:ENGINE) && !YAML::ENGINE.syck?
+    yaml = if YAML.const_defined?(:ENGINE) && !YAML::ENGINE.syck? then
+             super
+           else
+             YAML.quick_emit object_id, opts do |out|
+               out.map taguri, to_yaml_style do |map|
+                 encode_with map
+               end
+             end
+           end
 
-    yaml = YAML.quick_emit object_id, opts do |out|
-      out.map taguri, to_yaml_style do |map|
-        encode_with map
-      end
-    end
+    yaml.gsub(/ !!null \n/, " \n")
   end
 
   def init_with coder # :nodoc:
