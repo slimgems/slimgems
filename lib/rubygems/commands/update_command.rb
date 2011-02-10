@@ -22,8 +22,13 @@ class Gem::Commands::UpdateCommand < Gem::Command
 
     add_install_update_options
 
-    add_option('--system',
+    OptionParser.accept Gem::Version do |value|
+      Gem::Version.new value
+    end
+
+    add_option('--system [VERSION]', Gem::Version,
                'Update the RubyGems system software') do |value, options|
+      value = Gem::Version.new(Gem::VERSION) unless Gem::Version === value
       options[:system] = value
     end
 
@@ -64,6 +69,30 @@ class Gem::Commands::UpdateCommand < Gem::Command
 
     gems_to_update = which_to_update hig, options[:args]
 
+    updated = update_gems gems_to_update
+
+    if updated.empty? then
+      say "Nothing to update"
+    else
+      say "Gems updated: #{updated.map { |spec| spec.name }.join ', '}"
+
+      if options[:generate_ri] then
+        updated.each do |gem|
+          Gem::DocManager.new(gem, options[:rdoc_args]).generate_ri
+        end
+
+        Gem::DocManager.update_ri_cache
+      end
+
+      if options[:generate_rdoc] then
+        updated.each do |gem|
+          Gem::DocManager.new(gem, options[:rdoc_args]).generate_rdoc
+        end
+      end
+    end
+  end
+
+  def update_gems gems_to_update
     updated = []
 
     installer = Gem::DependencyInstaller.new options
@@ -87,54 +116,40 @@ class Gem::Commands::UpdateCommand < Gem::Command
       end
     end
 
-    if updated.empty? then
-      say "Nothing to update"
-    else
-      say "Gems updated: #{updated.map { |spec| spec.name }.join ', '}"
-
-      if options[:generate_ri] then
-        updated.each do |gem|
-          Gem::DocManager.new(gem, options[:rdoc_args]).generate_ri
-        end
-
-        Gem::DocManager.update_ri_cache
-      end
-
-      if options[:generate_rdoc] then
-        updated.each do |gem|
-          Gem::DocManager.new(gem, options[:rdoc_args]).generate_rdoc
-        end
-      end
-    end
+    updated
   end
 
   ##
   # Update RubyGems software to the latest version.
 
   def update_rubygems
-    hig = {}
-
     say "Updating #{Gem::NAME}"
 
     unless options[:args].empty? then
       raise "No gem names are allowed with the --system option"
     end
 
+    options[:user_install] = false
+
+    version = options[:system]
+
     rubygems_update         = Gem::Specification.new
     rubygems_update.name    = 'slimgems'
-    rubygems_update.version = Gem::Version.new Gem::VERSION
-    hig['slimgems']  = rubygems_update
+    rubygems_update.version = version
 
-    options[:user_install] = false
+    hig = {
+      'slimgems' => rubygems_update
+    }
+
+    gems_to_update = which_to_update hig, options[:args]
+    updated        = update_gems gems_to_update
 
     Gem.source_index.refresh!
 
-    update_gems = Gem.source_index.find_name 'slimgems'
+    update_gems = Gem.source_index.find_name 'slimgems', version.version
+    version        = update_gems.last.version
 
-    latest_update_gem = update_gems.sort_by { |s| s.version }.last
-
-    say "Updating #{Gem::NAME} to #{latest_update_gem.version}"
-    version = latest_update_gem.version
+    say "Updating #{Gem::NAME} to #{version}"
 
     args = []
     args << '--prefix' << Gem.prefix if Gem.prefix
