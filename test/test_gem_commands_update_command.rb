@@ -119,7 +119,7 @@ class TestGemCommandsUpdateCommand < RubyGemTestCase
     end
 
     out = @ui.output.split "\n"
-    assert_equal 'Nothing to update, at latest version', out.shift
+    assert_equal "Latest version currently installed. Aborting.", out.shift
     assert_empty out
   end
 
