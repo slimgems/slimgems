@@ -1182,9 +1182,7 @@ class Gem::Specification
   ##
   # :attr_accessor: has_rdoc
   #
-  # Deprecated and ignored, defaults to true.
-  #
-  # Formerly used to indicate this gem was RDoc-capable.
+  # Indicates that this gem is RDoc-capable.
 
   attribute :has_rdoc, true
 
@@ -1357,20 +1355,6 @@ class Gem::Specification
   # Singular accessor for #test_files
 
   attribute_alias_singular :test_file, :test_files
-
-  ##
-  # has_rdoc is now ignored
-
-  overwrite_accessor :has_rdoc do
-    true
-  end
-
-  ##
-  # has_rdoc is now ignored
-
-  overwrite_accessor :has_rdoc= do |value|
-    @has_rdoc = true
-  end
 
   overwrite_accessor :version= do |version|
     @version = Gem::Version.create(version)

@@ -594,7 +594,7 @@ end
 
     assert_equal '', @ui.output
 
-    assert_equal true, @a1.has_rdoc
+    assert_equal false, @a1.has_rdoc
   end
 
   def test_hash
@@ -822,6 +822,7 @@ Gem::Specification.new do |s|
   s.executables = [\"exec\"]
   s.extensions = [\"ext/a/extconf.rb\"]
   s.files = [\"lib/code.rb\", \"test/suite.rb\", \"bin/exec\", \"ext/a/extconf.rb\"]
+  s.has_rdoc = %q{true}
   s.homepage = %q{http://example.com}
   s.licenses = [\"MIT\"]
   s.require_paths = [\"lib\"]

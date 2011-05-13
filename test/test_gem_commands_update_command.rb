@@ -38,14 +38,12 @@ class TestGemCommandsUpdateCommand < RubyGemTestCase
     end
 
     out = @ui.output.split "\n"
-    assert_equal "Updating installed gems", out.shift
-    assert_equal "Updating #{@a2.name}", out.shift
-    assert_equal "Successfully installed #{@a2.full_name}", out.shift
-    assert_equal "Gems updated: #{@a2.name}", out.shift
-    assert_equal "Installing ri documentation for a-2...", out.shift
-    assert_equal "Installing RDoc documentation for a-2...", out.shift
-
-    assert_empty out
+    assert_match "Updating installed gems", out.shift
+    assert_match "Updating #{@a2.name}", out.shift
+    assert_match "Successfully installed #{@a2.full_name}", out.shift
+    assert_match "Gems updated: #{@a2.name}", out.shift
+    assert_match "Installing ri documentation for a-2...", out.join
+    assert_match "Installing RDoc documentation for a-2...", out.join
   end
 
   # before:

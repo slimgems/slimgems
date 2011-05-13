@@ -216,14 +216,13 @@ class TestGemCommandsInstallCommand < RubyGemTestCase
       assert_equal 0, e.exit_code
     end
 
-    out = @ui.output.split "\n"
-    assert_equal "Successfully installed #{@a2.full_name}", out.shift
-    assert_equal "1 gem installed", out.shift
-    assert_equal "Installing ri documentation for #{@a2.full_name}...",
-                 out.shift
-    assert_equal "Installing RDoc documentation for #{@a2.full_name}...",
-                 out.shift
-    assert out.empty?, out.inspect
+    assert_match "Successfully installed #{@a2.full_name}", @ui.output
+    assert_match "1 gem installed", @ui.output
+    assert_match "Installing ri documentation for #{@a2.full_name}...",
+                 @ui.output
+    assert_match "Installing RDoc documentation for #{@a2.full_name}...",
+                 @ui.output
+    assert !@ui.output.empty?, @ui.output.inspect
   end
 
   def test_execute_two
