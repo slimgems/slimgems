@@ -5,9 +5,9 @@
 # See LICENSE.txt for permissions.
 #++
 
+$:.unshift(File.dirname(__FILE__) + '/../lib/')
 require 'rubygems'
 require 'rubygems/gem_runner'
-require 'rubygems/exceptions'
 
 required_version = Gem::Requirement.new ">= 1.8.6"
 
