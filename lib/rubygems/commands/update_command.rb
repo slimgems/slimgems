@@ -55,9 +55,9 @@ class Gem::Commands::UpdateCommand < Gem::Command
       end
 
       rubygems_update = Gem::Specification.new
-      rubygems_update.name = 'rubygems-update'
+      rubygems_update.name = 'slimgems'
       rubygems_update.version = Gem::Version.new Gem::VERSION
-      hig['rubygems-update'] = rubygems_update
+      hig['slimgems'] = rubygems_update
 
       options[:user_install] = false
     else
@@ -97,10 +97,10 @@ class Gem::Commands::UpdateCommand < Gem::Command
       end
     end
 
-    if gems_to_update.include? "rubygems-update" then
+    if gems_to_update.include? "slimgems" then
       Gem.source_index.refresh!
 
-      update_gems = Gem.source_index.find_name 'rubygems-update'
+      update_gems = Gem.source_index.find_name 'slimgems'
 
       latest_update_gem = update_gems.sort_by { |s| s.version }.last
 
@@ -141,7 +141,7 @@ class Gem::Commands::UpdateCommand < Gem::Command
     args << '--no-ri' unless options[:generate_ri]
     args << '--no-format-executable' if options[:no_format_executable]
 
-    update_dir = File.join Gem.dir, 'gems', "rubygems-update-#{version}"
+    update_dir = File.join Gem.dir, 'gems', "slimgems-#{version}"
 
     Dir.chdir update_dir do
       say "Installing RubyGems #{version}"

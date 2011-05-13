@@ -103,7 +103,8 @@ require 'etc'
 # -The RubyGems Team
 
 module Gem
-  RubyGemsVersion = VERSION = '1.3.7'
+  NAME = 'SlimGems'
+  RubyGemsVersion = VERSION = '1.3.8'
 
   ##
   # Raised when RubyGems is unable to load or activate a gem.  Contains the

@@ -117,6 +117,8 @@ By default, this RubyGems will install gem as:
     say "RubyGems #{Gem::VERSION} installed"
 
     uninstall_old_gemcutter
+    
+    uninstall_old_rubygems
 
     install_rdoc
 
@@ -163,7 +165,7 @@ By default, this RubyGems will install gem as:
     Dir.chdir 'bin' do
       bin_files = Dir['*']
 
-      bin_files.delete 'update_rubygems'
+      bin_files.delete 'update_slimgems'
 
       bin_files.each do |bin_file|
         bin_file_formatted = if options[:format_executable] then
@@ -231,13 +233,16 @@ TEXT
 
   def install_rdoc
     gem_doc_dir = File.join Gem.dir, 'doc'
-    rubygems_name = "rubygems-#{Gem::VERSION}"
+    rubygems_name = "slimgems-#{Gem::VERSION}"
     rubygems_doc_dir = File.join gem_doc_dir, rubygems_name
 
     if File.writable? gem_doc_dir and
        (not File.exist? rubygems_doc_dir or
         File.writable? rubygems_doc_dir) then
       say "Removing old RubyGems RDoc and ri" if @verbose
+      Dir[File.join(Gem.dir, 'doc', 'slimgems-[0-9]*')].each do |dir|
+        rm_rf dir
+      end
       Dir[File.join(Gem.dir, 'doc', 'rubygems-[0-9]*')].each do |dir|
         rm_rf dir
       end
@@ -345,19 +350,7 @@ abort "#{deprecation_message}"
   end
 
   def run_rdoc(*args)
-    begin
-      gem 'rdoc'
-    rescue Gem::LoadError
-    end
-
-    require 'rdoc/rdoc'
-
-    args << '--quiet'
-    args << '--main' << 'README'
-    args << '.' << 'README' << 'LICENSE.txt' << 'GPL.txt'
-
-    r = RDoc::RDoc.new
-    r.document args
+    # don't need to do this
   end
 
   def uninstall_old_gemcutter
@@ -369,5 +362,13 @@ abort "#{deprecation_message}"
   rescue Gem::InstallError
   end
 
+  def uninstall_old_rubygems
+    require 'rubygems/uninstaller'
+
+    ui = Gem::Uninstaller.new('rubygems-update', :all => true, :ignore => true, 
+      :executables => true)
+    ui.uninstall
+  rescue Gem::InstallError
+  end
 end
 
