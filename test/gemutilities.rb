@@ -1,7 +1,6 @@
 at_exit { $SAFE = 1 }
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-
 if RUBY_VERSION > '1.9' then
   Gem::QuickLoader.load_full_rubygems_library
 else
@@ -31,7 +30,7 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'mockgemui')
 
 module Gem
   def self.searcher=(searcher)
-    MUTEX.synchronize do @searcher = searcher end
+    @searcher = searcher
   end
 
   def self.source_index=(si)

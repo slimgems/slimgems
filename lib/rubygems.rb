@@ -1,11 +1,14 @@
 # -*- ruby -*-
-#--
 # Copyright 2006 by Chad Fowler, Rich Kilmer, Jim Weirich and others.
 # All rights reserved.
 # See LICENSE.txt for permissions.
-#++
 
 gem_disabled = !defined? Gem
+
+unless gem_disabled
+  # Nuke the Quickloader stuff
+  Gem::QuickLoader.remove
+end
 
 require 'rubygems/defaults'
 require 'thread'
@@ -143,9 +146,6 @@ module Gem
 
   DIRECTORIES = %w[cache doc gems specifications] unless defined?(DIRECTORIES)
 
-  # :stopdoc:
-  MUTEX = Mutex.new
-
   RubyGemsPackageVersion = VERSION
   # :startdoc:
 
@@ -171,6 +171,7 @@ module Gem
   @ruby = nil
   @sources = []
 
+  @post_build_hooks     ||= []
   @post_install_hooks   ||= []
   @post_uninstall_hooks ||= []
   @pre_uninstall_hooks  ||= []
@@ -366,9 +367,7 @@ module Gem
 
     @@source_index = nil
 
-    MUTEX.synchronize do
-      @searcher = nil
-    end
+    @searcher = nil
   end
 
   ##
@@ -457,32 +456,37 @@ module Gem
   end
 
   ##
-  # Returns a list of paths matching +file+ that can be used by a gem to pick
+  # Returns a list of paths matching +glob+ that can be used by a gem to pick
   # up features from other gems.  For example:
   #
   #   Gem.find_files('rdoc/discover').each do |path| load path end
   #
-  # find_files search $LOAD_PATH for files as well as gems.
+  # if +check_load_path+ is true (the default), then find_files also searches
+  # $LOAD_PATH for files as well as gems.
   #
   # Note that find_files will return all files even if they are from different
   # versions of the same gem.
 
-  def self.find_files(path)
-    load_path_files = $LOAD_PATH.map do |load_path|
-      files = Dir["#{File.expand_path path, load_path}#{Gem.suffix_pattern}"]
+  def self.find_files(glob, check_load_path=true)
+    files = []
 
-      files.select do |load_path_file|
-        File.file? load_path_file.untaint
-      end
-    end.flatten
+    if check_load_path
+      files = $LOAD_PATH.map { |load_path|
+        Dir["#{File.expand_path glob, load_path}#{Gem.suffix_pattern}"]
+      }.flatten.select { |file| File.file? file.untaint }
+    end
 
-    specs = searcher.find_all path
+    specs = searcher.find_all glob
 
-    specs_files = specs.map do |spec|
-      searcher.matching_files spec, path
-    end.flatten
+    specs.each do |spec|
+      files.concat searcher.matching_files(spec, glob)
+    end
 
-    (load_path_files + specs_files).flatten.uniq
+    # $LOAD_PATH might contain duplicate entries or reference
+    # the spec dirs directly, so we prune.
+    files.uniq! if check_load_path
+
+    return files
   end
 
   ##
@@ -499,18 +503,19 @@ module Gem
   def self.find_home
     unless RUBY_VERSION > '1.9' then
       ['HOME', 'USERPROFILE'].each do |homekey|
-        return ENV[homekey] if ENV[homekey]
+        return File.expand_path(ENV[homekey]) if ENV[homekey]
       end
 
       if ENV['HOMEDRIVE'] && ENV['HOMEPATH'] then
-        return "#{ENV['HOMEDRIVE']}#{ENV['HOMEPATH']}"
+        return File.expand_path("#{ENV['HOMEDRIVE']}#{ENV['HOMEPATH']}")
       end
     end
 
     File.expand_path "~"
   rescue
     if File::ALT_SEPARATOR then
-      "C:/"
+      drive = ENV['HOMEDRIVE'] || ENV['SystemDrive']
+      File.join(drive.to_s, '/')
     else
       "/"
     end
@@ -595,16 +600,12 @@ module Gem
 
   def self.load_path_insert_index
     index = $LOAD_PATH.index ConfigMap[:sitelibdir]
+  end
 
-    $LOAD_PATH.each_with_index do |path, i|
-      if path.instance_variables.include?(:@gem_prelude_index) or
-        path.instance_variables.include?('@gem_prelude_index') then
-        index = i
-        break
-      end
+  def self.remove_prelude_paths
+    Gem::QuickLoader::GemLoadPaths.each do |path|
+      $LOAD_PATH.delete(path)
     end
-
-    index
   end
 
   ##
@@ -660,6 +661,17 @@ module Gem
       @platforms = [Gem::Platform::RUBY, Gem::Platform.local]
     end
     @platforms
+  end
+
+  ##
+  # Adds a post-build hook that will be passed an Gem::Installer instance
+  # when Gem::Installer#install is called.  The hook is called after the gem
+  # has been extracted and extensions have been built but before the
+  # executables or gemspec has been written.  If the hook returns +false+ then
+  # the gem's files will be removed and the install will be aborted.
+
+  def self.post_build(&hook)
+    @post_build_hooks << hook
   end
 
   ##
@@ -745,9 +757,7 @@ module Gem
   def self.refresh
     source_index.refresh!
 
-    MUTEX.synchronize do
-      @searcher = nil
-    end
+    @searcher = nil
   end
 
   ##
@@ -837,9 +847,7 @@ module Gem
   # The GemPathSearcher object used to search for matching installed gems.
 
   def self.searcher
-    MUTEX.synchronize do
-      @searcher ||= Gem::GemPathSearcher.new
-    end
+    @searcher ||= Gem::GemPathSearcher.new
   end
 
   ##
@@ -889,13 +897,8 @@ module Gem
   # default_sources if it is not installed.
 
   def self.sources
-    if @sources.empty? then
-      begin
-        gem 'sources', '> 0.0.1'
-        require 'sources'
-      rescue LoadError
-        @sources = default_sources
-      end
+    if !@sources || @sources.empty? then
+      @sources = default_sources
     end
 
     @sources
@@ -979,9 +982,7 @@ module Gem
   ##
   # Find all 'rubygems_plugin' files and load them
 
-  def self.load_plugins
-    plugins = Gem.find_files 'rubygems_plugin'
-
+  def self.load_plugin_files(plugins)
     plugins.each do |plugin|
 
       # Skip older versions of the GemCutter plugin: Its commands are in
@@ -998,12 +999,43 @@ module Gem
     end
   end
 
+  ##
+  # Find all 'rubygems_plugin' files in installed gems and load them
+
+  def self.load_plugins
+    load_plugin_files find_files('rubygems_plugin', false)
+  end
+
+  ##
+  # Find all 'rubygems_plugin' files in $LOAD_PATH and load them
+
+  def self.load_env_plugins
+    path = "rubygems_plugin"
+
+    files = []
+    $LOAD_PATH.each do |load_path|
+      globbed = Dir["#{File.expand_path path, load_path}#{Gem.suffix_pattern}"]
+
+      globbed.each do |load_path_file|
+        files << load_path_file if File.file?(load_path_file.untaint)
+      end
+    end
+
+    load_plugin_files files
+  end
+
   class << self
 
     ##
     # Hash of loaded Gem::Specification keyed by name
 
     attr_reader :loaded_specs
+
+    ##
+    # The list of hooks to be run before Gem::Install#install finishes
+    # installation
+
+    attr_reader :post_build_hooks
 
     ##
     # The list of hooks to be run before Gem::Install#install does any work
@@ -1044,11 +1076,24 @@ module Gem
 
   YAML_SPEC_DIR = 'quick/'
 
+  root = ''
+  autoload :Version, 'rubygems/version'
+  autoload :Requirement, 'rubygems/requirement'
+  autoload :Dependency, 'rubygems/dependency'
+  autoload :GemPathSearcher, 'rubygems/gem_path_searcher'
+  autoload :SpecFetcher, 'rubygems/spec_fetcher'
+  autoload :UserInteraction, 'rubygems/user_interaction'
+  autoload :Specification, 'rubygems/specification'
+  autoload :Cache, 'rubygems/source_index'
+  autoload :SourceIndex, 'rubygems/source_index'
+  autoload :Platform, 'rubygems/platform'
+  autoload :Builder, 'rubygems/builder'
+  autoload :ConfigFile, 'rubygems/config_file'
 end
 
 module Kernel
 
-  undef gem if respond_to? :gem # defined in gem_prelude.rb on 1.9
+  remove_method :gem if respond_to?(:gem, true) # defined in gem_prelude.rb on 1.9
 
   ##
   # Use Kernel#gem to activate a specific version of +gem_name+.
@@ -1098,13 +1143,6 @@ def RbConfig.datadir(package_name)
 end
 
 require 'rubygems/exceptions'
-require 'rubygems/version'
-require 'rubygems/requirement'
-require 'rubygems/dependency'
-require 'rubygems/gem_path_searcher'    # Needed for Kernel#gem
-require 'rubygems/source_index'         # Needed for Kernel#gem
-require 'rubygems/platform'
-require 'rubygems/builder'              # HACK: Needed for rake's package task.
 
 begin
   ##
@@ -1126,15 +1164,27 @@ end
 
 require 'rubygems/config_file'
 
+class << Gem
+  remove_method :try_activate if Gem.respond_to?(:try_activate, true)
+
+  def try_activate(path)
+    spec = Gem.searcher.find(path)
+    return false unless spec
+
+    Gem.activate(spec.name, "= #{spec.version}")
+    return true
+  end
+end
+
 ##
 # Enables the require hook for RubyGems.
 #
-# Ruby 1.9 allows --disable-gems, so we require it when we didn't detect a Gem
-# constant at rubygems.rb load time.
+# if --disable-rubygems was used, then the prelude wasn't loaded, so
+# we need to load the custom_require now.
 
-require 'rubygems/custom_require' if gem_disabled or RUBY_VERSION < '1.9'
+if gem_disabled
+  require 'rubygems/custom_require'
+end
 
 Gem.clear_paths
-
-Gem.load_plugins
 
