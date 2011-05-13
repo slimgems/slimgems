@@ -172,6 +172,7 @@ class Gem::CommandManager
         alert_error "Loading command: #{command_name} (#{e.class})\n    #{e}"
         ui.errs.puts "\t#{e.backtrace.join "\n\t"}" if
           Gem.configuration.backtrace
+        raise RuntimeError
       end
       retry
     end.new
