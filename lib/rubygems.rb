@@ -1092,7 +1092,7 @@ module Gem
   autoload :ConfigFile, 'rubygems/config_file'
 end
 
-module Kernel
+module ::Kernel
 
   remove_method :gem if respond_to?(:gem, true) # defined in gem_prelude.rb on 1.9
 
