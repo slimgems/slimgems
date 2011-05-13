@@ -25,8 +25,8 @@ if you see "Nothing to update".
 If you have an older version of RubyGems installed, then you can still
 do it in two steps:
 
-  $ gem install rubygems-update  # again, might need to be admin/root
-  $ update_rubygems              # ... here too
+  $ gem install slimgems  # again, might need to be admin/root
+  $ update_slimgems       # ... here too
 
 If you don't have any RubyGems install, there is still the pre-gem approach to
 getting software, doing it manually:

@@ -4,140 +4,15 @@ $:.unshift 'lib'
 
 require 'rubygems'
 require 'rubygems/package_task'
-
-require 'hoe'
-
-Hoe.plugin :minitest
-
-hoe = Hoe.spec 'rubygems-update' do
-  self.rubyforge_name = 'rubygems'
-  self.author         = ['Jim Weirich', 'Chad Fowler', 'Eric Hodel']
-  self.email          = %w[rubygems-developers@rubyforge.org]
-  self.readme_file    = 'README'
-  self.need_zip       = false
-  self.need_tar       = false
-
-  spec_extras[:required_rubygems_version] = Gem::Requirement.default
-  spec_extras[:required_ruby_version]     = Gem::Requirement.new '> 1.8.3'
-  spec_extras[:executables]               = ['update_rubygems']
-
-  clean_globs.push('**/debug.log',
-                   '*.out',
-                   '.config',
-                   'data__',
-                   'html',
-                   'logs',
-                   'graph.dot',
-                   'pkgs/sources/sources*.gem',
-                   'scripts/*.hieraki')
-
-  extra_dev_deps << ['builder', '~> 2.1']
-  extra_dev_deps << ['hoe-seattlerb', '~> 1.2']
-  extra_dev_deps << ['minitest', '~> 1.4']
-  extra_dev_deps << ['session', '~> 2.4']
-
-  spec_extras['rdoc_options'] = proc do |rdoc_options|
-    rdoc_options << "--title=RubyGems #{self.version} Documentation"
-  end
-  spec_extras['require_paths'] = %w[hide_lib_for_update]
-end
+require 'rake/testtask'
 
 desc "Run just the functional tests"
 Rake::TestTask.new(:test_functional) do |t|
   t.test_files = FileList['test/functional*.rb']
-  t.warning = true
 end
 
-# --------------------------------------------------------------------
-# Creating a release
-
-# It's good to have RG's development dependencies expressed in the Hoe
-# block above, but including them in the rubygems-update gemspec makes
-# it very difficult for people on old RG versions to install it,
-# especially since they're working against stub legacy indexes
-# now. Remove 'em before building the gem.
-
-task :debug_gem => :scrub_dev_deps
-Rake::Task[:gem].prerequisites.unshift :scrub_dev_deps
-
-task :scrub_dev_deps do
-  hoe.spec.dependencies.reject! { |d| :development == d.type }
-end
-
-task :prerelease => [:clobber, :sanity_check, :test, :test_functional]
-
-task :postrelease => [:tag, :publish_docs]
-
-Rake::Task[:release_to_rubyforge].clear_actions
-
-task :release_to_rubyforge do
-  files = Dir["pkg/rubygems-update*.gem"]
-  rf = RubyForge.new.configure
-  rf.login
-  rf.add_file hoe.rubyforge_name, hoe.rubyforge_name, hoe.version, files.first
-end
-
-pkg_dir_path = "pkg/rubygems-update-#{hoe.version}"
-task pkg_dir_path do
-  mv pkg_dir_path, "pkg/rubygems-#{hoe.version}"
-end
-
-task :package => [pkg_dir_path] do
-  Dir.chdir 'pkg' do
-    sh "tar -czf rubygems-#{hoe.version}.tgz rubygems-#{hoe.version}"
-    sh "zip -q -r rubygems-#{hoe.version}.zip rubygems-#{hoe.version}"
-  end
-end
-
-task :sanity_check do
-  abort "svn status dirty. commit or revert them" unless `svn st`.empty?
-end
-
-task :tag => :sanity_check do
-  reltag = "REL_#{Gem::VERSION.gsub(/\./, '_')}"
-  svn_url = "svn+ssh://rubyforge.org/var/svn/rubygems"
-  sh %{svn copy #{svn_url}/trunk #{svn_url}/tags/#{reltag}}
-end
-
-# Misc Tasks ---------------------------------------------------------
-
-# Git mirror support. You probably don't need to care about
-# these. Don't run 'em unless you have a John-style git-svn setup
-# pointed at a valid, pushable Git remote called "origin".
-
-namespace :git do
-  namespace :svn do
-    task(:fetch) { sh "git svn fetch" }
-  end
-
-  task :sync => %w(svn:fetch sync:branches sync:tags)
-
-  namespace :sync do
-    task :branches do
-      {
-        "trunk" => "master",
-      }.each do |svn, git|
-        sh "git push origin svn/#{svn}:#{git}"
-      end
-    end
-
-    task :tags do
-      old    = `git tag`
-      tags   = `git for-each-ref refs/remotes/svn/tags`.split "\n"
-      tagged = false
-
-      tags.each do |tag|
-        next unless /(REL_.*)$/ =~ tag
-        name, sha, _, sym = $1, *tag.split(/\s/)
-
-        next if /#{name}/ =~ old
-        sh "git tag -f '#{name}' #{sha}"
-        tagged = true
-      end
-
-      sh "git push --tags" if tagged
-    end
-  end
+Rake::TestTask.new(:test) do |t|
+  t.test_files = FileList['test/test_*.rb']
 end
 
 # These tasks expect to have the following directory structure:
