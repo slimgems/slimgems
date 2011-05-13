@@ -1185,8 +1185,7 @@ end
         @a1.validate
       end
 
-      assert_equal "WARNING:  no rubyforge_project specified\n",
-                   @ui.error, 'error'
+      assert_equal "", @ui.error, 'error'
     end
   end
 
