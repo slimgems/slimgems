@@ -523,7 +523,7 @@ load Gem.bin_path('a', 'my_exec', version)
     cache_file = File.join @gemhome, 'cache', @spec.file_name
 
     Gem.pre_install do |installer|
-      refute File.exist?(cache_file), 'cache file should not exist yet'
+      assert !File.exist?(cache_file), 'cache file should not exist yet'
     end
 
     Gem.post_install do |installer|
