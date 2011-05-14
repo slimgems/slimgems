@@ -296,8 +296,8 @@ class TestGem < RubyGemTestCase
 
     expected = [
       File.expand_path('../foo/discover.rb', __FILE__),
-      File.join(foo2.full_gem_path, discover_path),
       File.join(foo1.full_gem_path, discover_path),
+      File.join(foo2.full_gem_path, discover_path),
     ]
 
     assert_equal expected, Gem.find_files('foo/discover')

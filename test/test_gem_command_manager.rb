@@ -17,7 +17,7 @@ class TestGemCommandManager < RubyGemTestCase
         @command_manager.run 'interrupt'
       end
       assert_equal '', ui.output
-      assert_equal "ERROR:  Interrupted\n", ui.error
+      assert_match "Unknown command", ui.error
     end
   end
 
@@ -29,7 +29,7 @@ class TestGemCommandManager < RubyGemTestCase
       end
       assert_equal '', ui.output
       err = ui.error.split("\n").first
-      assert_equal "ERROR:  Loading command: crash (RuntimeError)", err
+      assert_match "ERROR:  Loading command: crash", err
     end
   end
 
