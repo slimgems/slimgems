@@ -4,7 +4,7 @@ eval "module ::PACKAGE\n#{contents}\nend"
 Gem::Specification.new do |s|
   s.name          = 'slimgems'
   s.summary       = 'SlimGems is a package management framework for Ruby'
-  s.description   = File.read('README')
+  s.description   = File.read('README.md')
   s.post_install_message = "Upgraded from RubyGems to #{PACKAGE::Gem::NAME} #{PACKAGE::Gem::VERSION}\n" + 
     File.open('History.txt') {|io| (io.gets('===') + io.gets('==='))[0...-3] }
   s.version       = PACKAGE::Gem::VERSION
@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.platform      = Gem::Platform::RUBY
   s.files         = Dir.glob("{bin,bootstrap,hide_lib_for_update,lib,test}/**/*") + 
                     Dir.glob('*.{rdoc,txt,rb}') + 
-                    ['README', 'Rakefile', 'ChangeLog']
+                    ['README.md', 'Rakefile', 'ChangeLog']
   s.require_paths = ['hide_lib_for_update']
   s.executables   = ['update_slimgems']
   s.extensions    = ['bootstrap/Rakefile']
