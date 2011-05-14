@@ -4,15 +4,6 @@
 * Github: http://github.com/slimgems/slimgems
 * Get gems from: http://rubygems.org
 
-## Notes about this RubyGems Fork
-
-SlimGems is a RubyGems fork of RubyGems 1.3.7 and a limited set of backports
-from 1.5.2. SlimGems is maintained by Loren Segal and others. SlimGems will
-provide continual improvements with a stable API.
-
-You can download the original RubyGems project at 
-http://rubyforge.org/projects/rubygems
-
 ## Description
 
 SlimGems is a drop-in replacement for RubyGems, a package management framework 
@@ -86,3 +77,12 @@ the following commands:
 
 Again, you might need to have administrator privileges (sudo) to run these
 commands.
+
+## Notes about this RubyGems Fork
+
+SlimGems is a RubyGems fork of RubyGems 1.3.7 and a limited set of backports
+from 1.5.2. SlimGems is maintained by Loren Segal and others. SlimGems will
+provide continual improvements with a stable API.
+
+You can download the original RubyGems project at 
+http://rubyforge.org/projects/rubygems
