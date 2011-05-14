@@ -60,7 +60,7 @@ class Gem::Installer
   ##
   # The options passed when the Gem::Installer was instantiated.
   
-  attr_reader :options
+  attr_accessor :options
 
   @path_warning = false
 
