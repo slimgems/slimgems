@@ -179,7 +179,7 @@ class TestGemCommandsInstallCommand < RubyGemTestCase
     util_setup_fake_fetcher
     util_setup_spec_fetcher quick_gem(correctly_spelled, '2')
 
-    @cmd.options[:args] = misspelled
+    @cmd.options[:args] = [misspelled]
 
     use_ui @ui do
       e = assert_raises Gem::SystemExitException do
