@@ -20,5 +20,4 @@ Gem::Specification.new do |s|
   s.extensions    = ['bootstrap/Rakefile']
   s.test_files    = Dir.glob('test/**/*.rb')
   s.required_ruby_version = '> 1.8.3'
-  s.add_runtime_dependency 'rake'
 end

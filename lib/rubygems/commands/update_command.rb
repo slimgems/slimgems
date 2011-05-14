@@ -156,36 +156,13 @@ class Gem::Commands::UpdateCommand < Gem::Command
     gems_to_update = which_to_update hig, options[:args]
 
     if gems_to_update.empty? then
-      say "Latest version currently installed. Aborting."
+      say "#{Gem::NAME} is already up-to-date (#{Gem::VERSION})"
       terminate_interaction
     end
 
-    update_gem gems_to_update.first, requirement
-
-    Gem.source_index.refresh!
-
-    installed_gems = Gem.source_index.find_name 'slimgems', requirement
-    version        = installed_gems.last.version
-
-    args = []
-    args << '--prefix' << Gem.prefix if Gem.prefix
-    args << '--no-rdoc' unless options[:generate_rdoc]
-    args << '--no-ri' unless options[:generate_ri]
-    args << '--no-format-executable' if options[:no_format_executable]
-
-    update_dir = File.join Gem.dir, 'gems', "slimgems-#{version}"
-
-    Dir.chdir update_dir do
-      say "Installing RubyGems #{version}"
-      setup_cmd = "#{Gem.ruby} setup.rb #{args.join ' '}"
-
-      # Make sure old rubygems isn't loaded
-      old = ENV["RUBYOPT"]
-      ENV.delete("RUBYOPT") if old
-      installed = system setup_cmd
-      say "#{Gem::NAME} system software updated" if installed
-      ENV["RUBYOPT"] = old if old
-    end
+    update_gem(gems_to_update.first, requirement)
+    spec = @updated.last
+    say "#{Gem::NAME} system software updated (#{spec.version})" if spec
   end
 
   def which_to_update(highest_installed_gems, gem_names)

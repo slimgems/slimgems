@@ -5,6 +5,9 @@ class TestGemCommandsUpdateCommand < RubyGemTestCase
 
   def setup
     super
+    
+    @oldpath = Dir.pwd
+    Dir.chdir(File.dirname(__FILE__))
 
     @cmd = Gem::Commands::UpdateCommand.new
 
@@ -23,7 +26,12 @@ class TestGemCommandsUpdateCommand < RubyGemTestCase
     @fetcher.data["#{@gem_repo}gems/#{@a2.file_name}"] =
       read_binary @a2_path
   end
-
+  
+  def teardown
+    super
+    Dir.chdir(@oldpath)
+  end
+  
   def test_execute
     util_clear_gems
 
@@ -47,7 +55,7 @@ class TestGemCommandsUpdateCommand < RubyGemTestCase
   end
 
   def util_setup_rubygem version
-    gem = quick_gem('rubygems-update', version.to_s) do |s|
+    gem = quick_gem('slimgems', version.to_s) do |s|
       s.files = %w[setup.rb]
     end
     write_file File.join(*%W[gems #{gem.original_name} setup.rb])
@@ -93,10 +101,9 @@ class TestGemCommandsUpdateCommand < RubyGemTestCase
     end
 
     out = @ui.output.split "\n"
-    assert_equal "Updating rubygems-update", out.shift
-    assert_equal "Successfully installed rubygems-update-9", out.shift
-    assert_equal "Installing RubyGems 9", out.shift
-    assert_equal "RubyGems system software updated", out.shift
+    assert_equal "Updating slimgems", out.shift
+    assert_equal "Successfully installed slimgems-9", out.shift
+    assert_equal "#{Gem::NAME} system software updated (9)", out.shift
 
     assert_empty out
   end
@@ -119,7 +126,7 @@ class TestGemCommandsUpdateCommand < RubyGemTestCase
     end
 
     out = @ui.output.split "\n"
-    assert_equal "Latest version currently installed. Aborting.", out.shift
+    assert_equal "#{Gem::NAME} is already up-to-date (#{Gem::VERSION})", out.shift
     assert_empty out
   end
 
@@ -140,10 +147,9 @@ class TestGemCommandsUpdateCommand < RubyGemTestCase
     end
 
     out = @ui.output.split "\n"
-    assert_equal "Updating rubygems-update", out.shift
-    assert_equal "Successfully installed rubygems-update-9", out.shift
-    assert_equal "Installing RubyGems 9", out.shift
-    assert_equal "RubyGems system software updated", out.shift
+    assert_equal "Updating slimgems", out.shift
+    assert_equal "Successfully installed slimgems-9", out.shift
+    assert_equal "#{Gem::NAME} system software updated (9)", out.shift
 
     assert_empty out
   end
@@ -165,10 +171,9 @@ class TestGemCommandsUpdateCommand < RubyGemTestCase
     end
 
     out = @ui.output.split "\n"
-    assert_equal "Updating rubygems-update", out.shift
-    assert_equal "Successfully installed rubygems-update-8", out.shift
-    assert_equal "Installing RubyGems 8", out.shift
-    assert_equal "RubyGems system software updated", out.shift
+    assert_equal "Updating slimgems", out.shift
+    assert_equal "Successfully installed slimgems-8", out.shift
+    assert_equal "#{Gem::NAME} system software updated (8)", out.shift
 
     assert_empty out
   end
@@ -179,7 +184,7 @@ class TestGemCommandsUpdateCommand < RubyGemTestCase
     @cmd.options[:generate_rdoc] = false
     @cmd.options[:generate_ri]   = false
 
-    assert_raises Gem::MockGemUi::TermError do
+    assert_raises MockGemUi::TermError do
       use_ui @ui do
         @cmd.execute
       end
@@ -318,6 +323,7 @@ class TestGemCommandsUpdateCommand < RubyGemTestCase
       :force         => false,
       :args          => [],
       :generate_rdoc => true,
+      :test          => false,
     }
 
     assert_equal expected, @cmd.options
@@ -338,6 +344,7 @@ class TestGemCommandsUpdateCommand < RubyGemTestCase
       :force         => false,
       :args          => [],
       :generate_rdoc => true,
+      :test          => false,
     }
 
     assert_equal expected, @cmd.options

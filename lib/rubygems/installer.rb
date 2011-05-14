@@ -178,7 +178,16 @@ class Gem::Installer
       FileUtils.cp @gem, File.join(@gem_home, "cache")
     end
 
-    say @spec.post_install_message unless @spec.post_install_message.nil?
+    unless @spec.post_install_message.nil?
+      # Only for slimgems
+      if @spec.name == 'slimgems'
+        lines = @spec.post_install_message.split("\n")
+        lines.shift if lines.include?("Upgraded from RubyGems")
+        say lines.join("\n")
+      else
+        say @spec.post_install_message
+      end
+    end
 
     @spec.loaded_from = File.join(@gem_home, 'specifications', @spec.spec_name)
 
@@ -483,7 +492,9 @@ TEXT
 
   def build_extensions
     return if @spec.extensions.empty?
-    say "Building native extensions.  This could take a while..."
+    unless @spec.name == 'slimgems'
+      say "Building native extensions.  This could take a while..."
+    end
     start_dir = Dir.pwd
     dest_path = File.join @gem_dir, @spec.require_paths.first
     ran_rake = false # only run rake once
