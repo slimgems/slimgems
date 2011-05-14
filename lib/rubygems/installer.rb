@@ -182,7 +182,7 @@ class Gem::Installer
       # Only for slimgems
       if @spec.name == 'slimgems'
         lines = @spec.post_install_message.split("\n")
-        lines.shift if lines.include?("Upgraded from RubyGems")
+        lines.shift if lines.first.include?("Upgraded from RubyGems")
         say lines.join("\n")
       else
         say @spec.post_install_message
