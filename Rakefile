@@ -6,6 +6,7 @@ require 'rubygems'
 require 'rubygems/package_task'
 require 'rake/testtask'
 
+task :default => :test
 desc "Run just the functional tests"
 Rake::TestTask.new(:test_functional) do |t|
   t.options = '--seed=1'
