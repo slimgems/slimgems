@@ -9,11 +9,13 @@ require 'rake/testtask'
 desc "Run just the functional tests"
 Rake::TestTask.new(:test_functional) do |t|
   t.options = '--seed=1'
+  t.ruby_opts = ['--disable-gems'] if RUBY_VERSION >= "1.9.1"
   t.test_files = FileList['test/functional*.rb']
 end
 
 Rake::TestTask.new(:test) do |t|
   t.options = '--seed=1'
+  t.ruby_opts = ['--disable-gems'] if RUBY_VERSION >= "1.9.1"
   t.test_files = FileList['test/test_*.rb']
 end
 
