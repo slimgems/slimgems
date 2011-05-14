@@ -114,7 +114,7 @@ By default, this RubyGems will install gem as:
 
     remove_source_caches install_destdir
 
-    say "RubyGems #{Gem::VERSION} installed"
+    say "#{Gem::NAME} #{Gem::VERSION} installed"
 
     uninstall_old_gemcutter
     
@@ -216,7 +216,7 @@ TEXT
   end
 
   def install_lib(lib_dir)
-    say "Installing RubyGems" if @verbose
+    say "Installing #{Gem::NAME}" if @verbose
 
     Dir.chdir 'lib' do
       lib_files = Dir[File.join('**', '*rb')]

@@ -123,7 +123,7 @@ class Gem::CommandManager
       say Gem::Command::HELP
       terminate_interaction(0)
     when '-v', '--version'
-      say "SlimGems " + Gem::VERSION
+      say "#{Gem::NAME} " + Gem::VERSION
       terminate_interaction(0)
     when /^-/
       alert_error "Invalid option: #{args[0]}.  See 'gem --help'."
