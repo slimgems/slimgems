@@ -240,7 +240,7 @@ class RubyGemTestCase < MiniTest::Unit::TestCase
     FileUtils.mkdir_p dir
 
     open path, 'wb' do |io|
-      yield io
+      yield io if block_given?
     end
 
     path
