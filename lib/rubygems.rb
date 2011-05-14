@@ -482,7 +482,7 @@ module Gem
 
     specs = searcher.find_all glob
 
-    specs.sort.each do |spec|
+    specs.each do |spec|
       files.concat searcher.matching_files(spec, glob)
     end
 
