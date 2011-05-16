@@ -1,6 +1,6 @@
 # SlimGems
 
-* Website: http://slimgems.org/
+* Website: http://slimgems.github.com/
 * Github: http://github.com/slimgems/slimgems
 * Get gems from: http://rubygems.org
 
