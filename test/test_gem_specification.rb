@@ -407,7 +407,7 @@ end
   end
 
   # The cgikit specification was reported to be causing trouble in at least
-  # one version of RubyGems, so we test explicitly for it.
+  # one version of SlimGems, so we test explicitly for it.
   def test_equals2_cgikit
     cgikit = Gem::Specification.new do |s|
       s.name = %q{cgikit}
@@ -1206,7 +1206,7 @@ end
       @a1.validate
     end
 
-    assert_equal "expected RubyGems version #{Gem::VERSION}, was 3",
+    assert_equal "expected #{Gem::NAME} version #{Gem::VERSION}, was 3",
                  e.message
   end
 

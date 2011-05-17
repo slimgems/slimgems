@@ -44,7 +44,7 @@ Some examples of 'gem' usage.
 
     See http://rubygems.rubyforge.org/wiki/wiki.pl?CreateAGemInTenMinutes
 
-* See information about RubyGems:
+* See information about #{Gem::NAME}:
 
     gem environment
 
@@ -54,11 +54,11 @@ Some examples of 'gem' usage.
   EOF
 
   PLATFORMS = <<-'EOF'
-RubyGems platforms are composed of three parts, a CPU, an OS, and a
+#{Gem::NAME} platforms are composed of three parts, a CPU, an OS, and a
 version.  These values are taken from values in rbconfig.rb.  You can view
 your current platform by running `gem environment`.
 
-RubyGems matches platforms as follows:
+#{Gem::NAME} matches platforms as follows:
 
   * The CPU must match exactly, unless one of the platforms has
     "universal" as the CPU.
@@ -66,7 +66,7 @@ RubyGems matches platforms as follows:
   * The versions must match exactly unless one of the versions is nil.
 
 For commands that install, uninstall and list gems, you can override what
-RubyGems thinks your platform is with the --platform option.  The platform
+#{Gem::NAME} thinks your platform is with the --platform option.  The platform
 you pass must match "#{cpu}-#{os}" or "#{cpu}-#{os}-#{version}".  On mswin
 platforms, the version is the compiler version, not the OS version.  (Ruby
 compiled with VC6 uses "60" as the compiler version, VC8 uses "80".)

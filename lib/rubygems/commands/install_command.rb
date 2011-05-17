@@ -58,7 +58,7 @@ version is also installed.
 If an extension fails to compile during gem installation the gem
 specification is not written out, but the gem remains unpacked in the
 repository.  You may need to specify the path to the library's headers and
-libraries to continue.  You can do this by adding a -- between RubyGems'
+libraries to continue.  You can do this by adding a -- between #{Gem::NAME}'
 options and the extension's build options:
 
   $ gem install some_extension_gem

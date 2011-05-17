@@ -8,7 +8,7 @@ require 'fileutils'
 require 'rubygems'
 
 ##
-# The documentation manager generates RDoc and RI for RubyGems.
+# The documentation manager generates RDoc and RI for SlimGems.
 
 class Gem::DocManager
 

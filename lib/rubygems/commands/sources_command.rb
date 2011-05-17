@@ -11,7 +11,7 @@ class Gem::Commands::SourcesCommand < Gem::Command
 
   def initialize
     super 'sources',
-          'Manage the sources and cache file RubyGems uses to search for gems'
+          "Manage the sources and cache file #{Gem::NAME} uses to search for gems"
 
     add_option '-a', '--add SOURCE_URI', 'Add source' do |value, options|
       options[:add] = value
@@ -86,10 +86,10 @@ class Gem::Commands::SourcesCommand < Gem::Command
            gem_repo then
 
           alert_warning <<-EOF
-RubyGems 1.2+ index not found for:
+#{Gem::NAME} 1.2+ index not found for:
 \t#{source_uri}
 
-Will cause RubyGems to revert to legacy indexes, degrading performance.
+Will cause #{Gem::NAME} to revert to legacy indexes, degrading performance.
           EOF
 
           say "#{source_uri} added to sources"

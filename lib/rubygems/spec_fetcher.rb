@@ -174,7 +174,7 @@ class Gem::SpecFetcher
   end
 
   ##
-  # Returns Array of gem repositories that were generated with RubyGems less
+  # Returns Array of gem repositories that were generated with SlimGems less
   # than 1.2.
 
   def legacy_repos
@@ -319,10 +319,10 @@ class Gem::SpecFetcher
     uri = exception.uri.to_s
     if uri =~ /specs\.#{Regexp.escape Gem.marshal_version}\.gz$/ then
       alert_warning <<-EOF
-RubyGems 1.2+ index not found for:
+#{Gem::NAME} 1.2+ index not found for:
 \t#{legacy_repos.join "\n\t"}
 
-RubyGems will revert to legacy indexes degrading performance.
+#{Gem::NAME} will revert to legacy indexes degrading performance.
       EOF
 
       yield

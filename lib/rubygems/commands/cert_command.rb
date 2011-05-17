@@ -4,7 +4,7 @@ require 'rubygems/security'
 class Gem::Commands::CertCommand < Gem::Command
 
   def initialize
-    super 'cert', 'Manage RubyGems certificates and signing settings'
+    super 'cert', "Manage #{Gem::NAME} certificates and signing settings"
 
     add_option('-a', '--add CERT',
                'Add a trusted certificate.') do |value, options|

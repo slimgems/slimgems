@@ -35,7 +35,7 @@ require 'rake/packagetask'
 # Gem::PackageTask will also generate the following tasks:
 #
 # [<b>"<em>package_dir</em>/<em>name</em>-<em>version</em>.gem"</b>]
-#   Create a RubyGems package with the given name and version.
+#   Create a SlimGems package with the given name and version.
 #
 # Example using a Gem::Specification:
 #

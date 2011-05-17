@@ -26,10 +26,10 @@ begin
 rescue LoadError => e
   puts
   puts "Required Gem 'Session' missing."
-  puts "We can attempt to install from the RubyGems Distribution,"
+  puts "We can attempt to install from the #{Gem::NAME} Distribution,"
   puts "but installation may require admin privileges on your system."
   puts
-  print "Install now from RubyGems distribution? [Yn]"
+  print "Install now from #{Gem::NAME} distribution? [Yn]"
   answer = gets
   if(answer =~ /^y/i || answer =~ /^[^a-zA-Z0-9]$/) then
     install_session

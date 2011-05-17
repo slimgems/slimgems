@@ -63,7 +63,7 @@
 #   <tt>top</tt> to get the top of the stack).
 # * Rename the methods to <tt>push_item</tt> and <tt>pop_item</tt>.
 #
-# == RubyGems Rational Versioning
+# == SlimGems Rational Versioning
 #
 # * Versions shall be represented by three non-negative integers, separated
 #   by periods (e.g. 3.1.4).  The first integers is the "major" version
@@ -153,7 +153,7 @@ class Gem::Version
   alias to_s version
 
   ##
-  # True if the +version+ string matches RubyGems' requirements.
+  # True if the +version+ string matches SlimGems' requirements.
 
   def self.correct? version
     version.to_s =~ ANCHORED_VERSION_PATTERN
@@ -222,14 +222,14 @@ class Gem::Version
 
   ##
   # Dump only the raw version string, not the complete object. It's a
-  # string for backwards (RubyGems 1.3.5 and earlier) compatibility.
+  # string for backwards (SlimGems 1.3.5 and earlier) compatibility.
 
   def marshal_dump
     [version]
   end
 
   ##
-  # Load custom marshal format. It's a string for backwards (RubyGems
+  # Load custom marshal format. It's a string for backwards (SlimGems
   # 1.3.5 and earlier) compatibility.
 
   def marshal_load array

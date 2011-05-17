@@ -14,13 +14,13 @@ require 'rubygems/defaults'
 require 'thread'
 
 ##
-# RubyGems is the Ruby standard for publishing and managing third party
+# SlimGems is the Ruby standard for publishing and managing third party
 # libraries.
 #
 # For user documentation, see:
 #
 # * <tt>gem help</tt> and <tt>gem help [command]</tt>
-# * {RubyGems User Guide}[http://docs.rubygems.org/read/book/1]
+# * {SlimGems User Guide}[http://docs.rubygems.org/read/book/1]
 # * {Frequently Asked Questions}[http://docs.rubygems.org/read/book/3]
 #
 # For gem developer documentation see:
@@ -29,15 +29,15 @@ require 'thread'
 # * Gem::Specification
 # * Gem::Version for version dependency notes
 #
-# Further RubyGems documentation can be found at:
+# Further SlimGems documentation can be found at:
 #
-# * {RubyGems API}[http://rubygems.rubyforge.org/rdoc] (also available from
+# * {SlimGems API}[http://rubygems.rubyforge.org/rdoc] (also available from
 #   <tt>gem server</tt>)
-# * {RubyGems Bookshelf}[http://rubygem.org]
+# * {SlimGems Bookshelf}[http://rubygem.org]
 #
-# == RubyGems Plugins
+# == SlimGems Plugins
 #
-# As of RubyGems 1.3.2, RubyGems will load plugins installed in gems or
+# As of #{Gem::NAME} 1.3.2, SlimGems will load plugins installed in gems or
 # $LOAD_PATH.  Plugins must be named 'rubygems_plugin' (.rb, .so, etc) and
 # placed at the root of your gem's #require_path.  Plugins are discovered via
 # Gem::find_files then loaded.  Take care when implementing a plugin as your
@@ -46,18 +46,18 @@ require 'thread'
 #
 # For an example plugin, see the graph gem which adds a `gem graph` command.
 #
-# == RubyGems Defaults, Packaging
+# == SlimGems Defaults, Packaging
 #
-# RubyGems defaults are stored in rubygems/defaults.rb.  If you're packaging
-# RubyGems or implementing Ruby you can change RubyGems' defaults.
+# SlimGems defaults are stored in rubygems/defaults.rb.  If you're packaging
+# #{Gem::NAME} or implementing Ruby you can change SlimGems' defaults.
 #
-# For RubyGems packagers, provide lib/rubygems/operating_system.rb and
+# For SlimGems packagers, provide lib/rubygems/operating_system.rb and
 # override any defaults from lib/rubygems/defaults.rb.
 #
 # For Ruby implementers, provide lib/rubygems/#{RUBY_ENGINE}.rb and override
 # any defaults from lib/rubygems/defaults.rb.
 #
-# If you need RubyGems to perform extra work on install or uninstall, your
+# If you need SlimGems to perform extra work on install or uninstall, your
 # defaults override file can set pre and post install and uninstall hooks.
 # See Gem::pre_install, Gem::pre_uninstall, Gem::post_install,
 # Gem::post_uninstall.
@@ -65,14 +65,14 @@ require 'thread'
 # == Bugs
 #
 # You can submit bugs to the
-# {RubyGems bug tracker}[http://rubyforge.org/tracker/?atid=575&group_id=126]
+# {SlimGems bug tracker}[http://rubyforge.org/tracker/?atid=575&group_id=126]
 # on RubyForge
 #
 # == Credits
 #
-# RubyGems is currently maintained by Eric Hodel.
+# SlimGems is currently maintained by Eric Hodel.
 #
-# RubyGems was originally developed at RubyConf 2003 by:
+# SlimGems was originally developed at RubyConf 2003 by:
 #
 # * Rich Kilmer  -- rich(at)infoether.com
 # * Chad Fowler  -- chad(at)chadfowler.com
@@ -99,16 +99,16 @@ require 'thread'
 #
 # Thanks!
 #
-# -The RubyGems Team
+# -The SlimGems Team
 
 module Gem
   NAME = 'SlimGems'
-  RubyGemsVersion = VERSION = '1.3.8'
+  SlimGemsVersion = VERSION = '1.3.8'
 
   ##
-  # Raised when RubyGems is unable to load or activate a gem.  Contains the
+  # Raised when SlimGems is unable to load or activate a gem.  Contains the
   # name and version requirements of the gem that either conflicts with
-  # already activated gems or that RubyGems is otherwise unable to activate.
+  # already activated gems or that SlimGems is otherwise unable to activate.
 
   class LoadError < ::LoadError
     # Name of gem
@@ -560,14 +560,14 @@ module Gem
   end
 
   ##
-  # Get the default RubyGems API host. This is normally
+  # Get the default SlimGems API host. This is normally
   # <tt>https://rubygems.org</tt>.
 
   def self.host
     @host ||= "https://rubygems.org"
   end
 
-  ## Set the default RubyGems API host.
+  ## Set the default SlimGems API host.
 
   def self.host= host
     @host = host
@@ -674,14 +674,14 @@ module Gem
   end
 
   ##
-  # Set array of platforms this RubyGems supports (primarily for testing).
+  # Set array of platforms this SlimGems supports (primarily for testing).
 
   def self.platforms=(platforms)
     @platforms = platforms
   end
 
   ##
-  # Array of platforms this RubyGems supports.
+  # Array of platforms this SlimGems supports.
 
   def self.platforms
     @platforms ||= []
@@ -737,7 +737,7 @@ module Gem
   end
 
   ##
-  # The directory prefix this RubyGems was installed at.
+  # The directory prefix this SlimGems was installed at.
 
   def self.prefix
     dir = File.dirname File.expand_path(__FILE__)
@@ -1014,7 +1014,7 @@ module Gem
     plugins.each do |plugin|
 
       # Skip older versions of the GemCutter plugin: Its commands are in
-      # RubyGems proper now.
+      # SlimGems proper now.
 
       next if plugin =~ /gemcutter-0\.[0-3]/
 
@@ -1022,7 +1022,7 @@ module Gem
         load plugin
       rescue ::Exception => e
         details = "#{plugin.inspect}: #{e.message} (#{e.class})"
-        warn "Error loading RubyGems plugin #{details}"
+        warn "Error loading #{Gem::NAME} plugin #{details}"
       end
     end
   end
@@ -1138,11 +1138,11 @@ module ::Kernel
   # different version was already activated, an exception will be raised.
   #
   # Kernel#gem should be called *before* any require statements (otherwise
-  # RubyGems may load a conflicting library version).
+  # SlimGems may load a conflicting library version).
   #
-  # In older RubyGems versions, the environment variable GEM_SKIP could be
+  # In older SlimGems versions, the environment variable GEM_SKIP could be
   # used to skip activation of specified gems, for example to test out changes
-  # that haven't been installed yet.  Now RubyGems defers to -I and the
+  # that haven't been installed yet.  Now SlimGems defers to -I and the
   # RUBYLIB environment variable to skip activation of a gem.
   #
   # Example:
@@ -1174,7 +1174,7 @@ require 'rubygems/exceptions'
 
 begin
   ##
-  # Defaults the operating system (or packager) wants to provide for RubyGems.
+  # Defaults the operating system (or packager) wants to provide for SlimGems.
 
   require 'rubygems/defaults/operating_system'
 rescue LoadError
@@ -1183,7 +1183,7 @@ end
 if defined?(RUBY_ENGINE) then
   begin
     ##
-    # Defaults the ruby implementation wants to provide for RubyGems
+    # Defaults the ruby implementation wants to provide for SlimGems
 
     require "rubygems/defaults/#{RUBY_ENGINE}"
   rescue LoadError
@@ -1205,7 +1205,7 @@ class << Gem
 end
 
 ##
-# Enables the require hook for RubyGems.
+# Enables the require hook for SlimGems.
 #
 # if --disable-rubygems was used, then the prelude wasn't loaded, so
 # we need to load the custom_require now.

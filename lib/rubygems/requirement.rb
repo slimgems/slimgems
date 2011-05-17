@@ -145,7 +145,7 @@ end
 
 # :stopdoc:
 # Gem::Version::Requirement is used in a lot of old YAML specs. It's aliased
-# here for backwards compatibility. I'd like to remove this, maybe in RubyGems
+# here for backwards compatibility. I'd like to remove this, maybe in SlimGems
 # 2.0.
 
 ::Gem::Version::Requirement = ::Gem::Requirement

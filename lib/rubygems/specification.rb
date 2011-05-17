@@ -34,7 +34,7 @@ class Gem::Specification
 
   ##
   # The the version number of a specification that does not specify one
-  # (i.e. RubyGems 0.7 or earlier).
+  # (i.e. SlimGems 0.7 or earlier).
 
   NONEXISTENT_SPECIFICATION_VERSION = -1
 
@@ -45,7 +45,7 @@ class Gem::Specification
   #--
   # When updating this number, be sure to also update #to_ruby.
   #
-  # NOTE RubyGems < 1.2 cannot load specification versions > 2.
+  # NOTE SlimGems < 1.2 cannot load specification versions > 2.
 
   CURRENT_SPECIFICATION_VERSION = 3
 
@@ -54,7 +54,7 @@ class Gem::Specification
   # key should be equal to the CURRENT_SPECIFICATION_VERSION.
 
   SPECIFICATION_VERSION_HISTORY = {
-    -1 => ['(RubyGems versions up to and including 0.7 did not have versioned specifications)'],
+    -1 => ["(#{Gem::NAME} versions up to and including 0.7 did not have versioned specifications)"],
     1  => [
       'Deprecated "test_suite_file" in favor of the new, but equivalent, "test_files"',
       '"test_file=x" is a shortcut for "test_files=[x]"'
@@ -521,7 +521,7 @@ class Gem::Specification
   end
 
   ##
-  # Sets the rubygems_version to the current RubyGems version
+  # Sets the rubygems_version to the current SlimGems version
 
   def mark_version
     @rubygems_version = Gem::VERSION
@@ -816,7 +816,7 @@ class Gem::Specification
 
     if rubygems_version != Gem::VERSION then
       raise Gem::InvalidSpecificationException,
-            "expected RubyGems version #{Gem::VERSION}, was #{rubygems_version}"
+            "expected #{Gem::NAME} version #{Gem::VERSION}, was #{rubygems_version}"
     end
 
     @@required_attributes.each do |symbol|
@@ -1058,7 +1058,7 @@ class Gem::Specification
   ##
   # :attr_accessor: rubygems_version
   #
-  # The version of RubyGems used to create this gem.
+  # The version of SlimGems used to create this gem.
   #
   # Do not set this, it is set automatically when the gem is packaged.
 
@@ -1104,7 +1104,7 @@ class Gem::Specification
   # The description should be more detailed than the summary.  For example,
   # you might wish to copy the entire README into the description.
   #
-  # As of RubyGems 1.3.2 newlines are no longer stripped.
+  # As of SlimGems 1.3.2 newlines are no longer stripped.
 
   required_attribute :summary
 
@@ -1143,7 +1143,7 @@ class Gem::Specification
   ##
   # :attr_accessor: rubyforge_project
   #
-  # The rubyforge project this gem lives under.  i.e. RubyGems'
+  # The rubyforge project this gem lives under.  i.e. SlimGems'
   # rubyforge_project is "rubygems".
 
   attribute :rubyforge_project
@@ -1158,7 +1158,7 @@ class Gem::Specification
   ##
   # :attr_accessor: autorequire
   #
-  # Autorequire was used by old RubyGems to automatically require a file.
+  # Autorequire was used by old SlimGems to automatically require a file.
   # It no longer is supported.
 
   attribute :autorequire
@@ -1201,7 +1201,7 @@ class Gem::Specification
   ##
   # :attr_accessor: required_rubygems_version
   #
-  # The RubyGems version required by this gem
+  # The SlimGems version required by this gem
 
   attribute :required_rubygems_version, Gem::Requirement.default
 

@@ -29,7 +29,7 @@ class Gem::Commands::UpdateCommand < Gem::Command
     end
 
     add_option('--system [VERSION]', Gem::Version,
-               'Update the RubyGems system software') do |value, options|
+               "Update the #{Gem::NAME} system software") do |value, options|
       value = true unless value
 
       options[:system] = value
@@ -126,7 +126,7 @@ class Gem::Commands::UpdateCommand < Gem::Command
   end
 
   ##
-  # Update RubyGems software to the latest version.
+  # Update SlimGems software to the latest version.
 
   def update_rubygems
     unless options[:args].empty? then

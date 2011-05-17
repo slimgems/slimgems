@@ -19,7 +19,7 @@ require 'rubygems/gem_openssl'
 #
 # == Overview
 #
-# Gem::Security implements cryptographic signatures in RubyGems.  The section
+# Gem::Security implements cryptographic signatures in SlimGems.  The section
 # below is a step-by-step guide to using signed gems and generating your own.
 #
 # == Walkthrough
@@ -78,7 +78,7 @@ require 'rubygems/gem_openssl'
 #   "/root/.rubygems/trust/cert-15dbb43a6edf6a70a85d4e784e2e45312cff7030.pem"
 #   does not exist'
 #
-# The culprit here is the security policy.  RubyGems has several different
+# The culprit here is the security policy.  SlimGems has several different
 # security policies.  Let's take a short break and go over the security
 # policies.  Here's a list of the available security policies, and a brief
 # description of each one:
@@ -86,7 +86,7 @@ require 'rubygems/gem_openssl'
 # * NoSecurity - Well, no security at all.  Signed packages are treated like
 #   unsigned packages.
 # * LowSecurity - Pretty much no security.  If a package is signed then
-#   RubyGems will make sure the signature matches the signing
+#   SlimGems will make sure the signature matches the signing
 #   certificate, and that the signing certificate hasn't expired, but
 #   that's it.  A malicious user could easily circumvent this kind of
 #   security.
@@ -106,10 +106,10 @@ require 'rubygems/gem_openssl'
 #   doesn't have a whole lot of options here; he can't modify the
 #   package contents without invalidating the signature, and he can't
 #   modify or remove signature or the signing certificate chain, or
-#   RubyGems will simply refuse to install the package.  Oh well, maybe
+#   SlimGems will simply refuse to install the package.  Oh well, maybe
 #   he'll have better luck causing problems for CPAN users instead :).
 #
-# So, the reason RubyGems refused to install our shiny new signed gem was
+# So, the reason SlimGems refused to install our shiny new signed gem was
 # because it was from an untrusted source.  Well, my code is infallible
 # (hah!), so I'm going to add myself as a trusted source.
 #
@@ -126,8 +126,8 @@ require 'rubygems/gem_openssl'
 #   # without any shenanigans)
 #   $ sudo gem install Imlib2-Ruby-0.5.0.gem -P HighSecurity
 #
-# This time RubyGems should accept your signed package and begin installing.
-# While you're waiting for RubyGems to work it's magic, have a look at some of
+# This time SlimGems should accept your signed package and begin installing.
+# While you're waiting for SlimGems to work it's magic, have a look at some of
 # the other security commands:
 #
 #   Usage: gem cert [options]
@@ -161,7 +161,7 @@ require 'rubygems/gem_openssl'
 # I have 50 trusted certificates, no problem.  What if there are 500 gem
 # authors?  1000?  Having to constantly add new trusted certificates is a
 # pain, and it actually makes the trust system less secure by encouraging
-# RubyGems users to blindly trust new certificates.
+# SlimGems users to blindly trust new certificates.
 #
 # Here's where certificate chains come in.  A certificate chain establishes an
 # arbitrarily long chain of trust between an issuing certificate and a child
@@ -202,8 +202,8 @@ require 'rubygems/gem_openssl'
 # their build certificate with the "--build" option, then has their
 # certificate signed by taking it with them to their next regional Ruby meetup
 # (in our hypothetical example), and it's signed there by the person holding
-# the regional RubyGems signing certificate, which is signed at the next
-# RubyConf by the holder of the top-level RubyGems certificate.  At each point
+# the regional SlimGems signing certificate, which is signed at the next
+# RubyConf by the holder of the top-level SlimGems certificate.  At each point
 # the issuer runs the same command:
 #
 #   # sign a certificate with the specified key and certificate
@@ -212,7 +212,7 @@ require 'rubygems/gem_openssl'
 #      --sign client_cert.pem
 #
 # Then the holder of issued certificate (in this case, our buddy
-# "alf@seattle"), can start using this signed certificate to sign RubyGems.
+# "alf@seattle"), can start using this signed certificate to sign SlimGems.
 # By the way, in order to let everyone else know about his new fancy signed
 # certificate, "alf@seattle" would change his gemspec file to look like this:
 #
@@ -223,7 +223,7 @@ require 'rubygems/gem_openssl'
 #   s.cert_chain  = ['/home/alf/doc/seattlerb-public_cert.pem',
 #                    '/home/alf/doc/alf_at_seattle-public_cert.pem']
 #
-# Obviously, this RubyGems trust infrastructure doesn't exist yet.  Also, in
+# Obviously, this SlimGems trust infrastructure doesn't exist yet.  Also, in
 # the "real world" issuers actually generate the child certificate from a
 # certificate request, rather than sign an existing certificate.  And our
 # hypothetical infrastructure is missing a certificate revocation system.
@@ -267,7 +267,7 @@ require 'rubygems/gem_openssl'
 #
 # == Manually verifying signatures
 #
-# In case you don't trust RubyGems you can verify gem signatures manually:
+# In case you don't trust SlimGems you can verify gem signatures manually:
 #
 # 1. Fetch and unpack the gem
 #

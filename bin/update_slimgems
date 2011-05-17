@@ -10,7 +10,7 @@ require 'rubygems'
 if ARGV.include? '-h' or ARGV.include? '--help' then
   $stderr.puts "slimgems_update [options]"
   $stderr.puts
-  $stderr.puts "This will install the latest version of RubyGems."
+  $stderr.puts "This will install the latest version of #{Gem::NAME}."
   $stderr.puts
   $stderr.puts "\t--version=X.Y\tUpdate slimgems from the X.Y version."
   exit
@@ -23,9 +23,9 @@ end
 update_specs = Gem.source_index.find_name('slimgems')
 update_spec = update_specs.sort_by {|s| s.version.to_s }.last
 if update_spec.nil?
-  puts "Error: Cannot find RubyGems Update Path!"
+  puts "Error: Cannot find #{Gem::NAME} Update Path!"
   puts
-  puts "RubyGems has already been updated."
+  puts "#{Gem::NAME} has already been updated."
   puts "The slimgems gem may now be uninstalled."
   puts "E.g.    gem uninstall slimgems"
 else

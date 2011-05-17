@@ -4,26 +4,26 @@ require 'rbconfig'
 require 'tmpdir'
 
 ##
-# Installs RubyGems itself.  This command is ordinarily only available from a
-# RubyGems checkout or tarball.
+# Installs SlimGems itself.  This command is ordinarily only available from a
+# SlimGems checkout or tarball.
 
 class Gem::Commands::SetupCommand < Gem::Command
 
   def initialize
-    super 'setup', 'Install RubyGems',
+    super 'setup', "Install #{Gem::NAME}",
           :format_executable => true, :rdoc => true, :ri => true,
           :site_or_vendor => :sitelibdir,
           :destdir => '', :prefix => ''
 
     add_option '--prefix=PREFIX',
-               'Prefix path for installing RubyGems',
+               "Prefix path for installing #{Gem::NAME}",
                'Will not affect gem repository location' do |prefix, options|
       options[:prefix] = File.expand_path prefix
     end
 
     add_option '--destdir=DESTDIR',
-               'Root directory to install RubyGems into',
-               'Mainly used for packaging RubyGems' do |destdir, options|
+               "Root directory to install #{Gem::NAME} into",
+               "Mainly used for packaging #{Gem::NAME}" do |destdir, options|
       options[:destdir] = File.expand_path destdir
     end
 
@@ -45,12 +45,12 @@ class Gem::Commands::SetupCommand < Gem::Command
     end
 
     add_option '--[no-]rdoc',
-               'Generate RDoc documentation for RubyGems' do |value, options|
+               "Generate RDoc documentation for #{Gem::NAME}" do |value, options|
       options[:rdoc] = value
     end
 
     add_option '--[no-]ri',
-               'Generate RI documentation for RubyGems' do |value, options|
+               "Generate RI documentation for #{Gem::NAME}" do |value, options|
       options[:ri] = value
     end
   end
@@ -70,18 +70,18 @@ class Gem::Commands::SetupCommand < Gem::Command
 
   def description # :nodoc:
     <<-EOF
-Installs RubyGems itself.
+Installs #{Gem::NAME} itself.
 
-RubyGems installs RDoc for itself in GEM_HOME.  By default this is:
+#{Gem::NAME} installs RDoc for itself in GEM_HOME.  By default this is:
   #{Gem.dir}
 
 If you prefer a different directory, set the GEM_HOME environment variable.
 
-RubyGems will install the gem command with a name matching ruby's
+#{Gem::NAME} will install the gem command with a name matching ruby's
 prefix and suffix.  If ruby was installed as `ruby18`, gem will be
 installed as `gem18`.
 
-By default, this RubyGems will install gem as:
+By default, this #{Gem::NAME} will install gem as:
   #{Gem.default_exec_format % 'gem'}
     EOF
   end
@@ -146,12 +146,12 @@ By default, this RubyGems will install gem as:
     say "-" * 78
     say
 
-    say "RubyGems installed the following executables:"
+    say "#{Gem::NAME} installed the following executables:"
     say @bin_file_names.map { |name| "\t#{name}\n" }
     say
 
     unless @bin_file_names.grep(/#{File::SEPARATOR}gem$/) then
-      say "If `gem` was installed by a previous RubyGems installation, you may need"
+      say "If `gem` was installed by a previous #{Gem::NAME} installation, you may need"
       say "to remove it by hand."
       say
     end
@@ -239,7 +239,7 @@ TEXT
     if File.writable? gem_doc_dir and
        (not File.exist? rubygems_doc_dir or
         File.writable? rubygems_doc_dir) then
-      say "Removing old RubyGems RDoc and ri" if @verbose
+      say "Removing old #{Gem::NAME} RDoc and ri" if @verbose
       Dir[File.join(Gem.dir, 'doc', 'slimgems-[0-9]*')].each do |dir|
         rm_rf dir
       end
@@ -275,11 +275,11 @@ TEXT
       lib_dir = Gem::ConfigMap[site_or_vendor]
       bin_dir = Gem::ConfigMap[:bindir]
     else
-      # Apple installed RubyGems into libdir, and RubyGems <= 1.1.0 gets
+      # Apple installed #{Gem::NAME} into libdir, and SlimGems <= 1.1.0 gets
       # confused about installation location, so switch back to
       # sitelibdir/vendorlibdir.
       if defined?(APPLE_GEM_HOME) and
-        # just in case Apple and RubyGems don't get this patched up proper.
+        # just in case Apple and SlimGems don't get this patched up proper.
         (prefix == Gem::ConfigMap[:libdir] or
          # this one is important
          prefix == File.join(Gem::ConfigMap[:libdir], 'ruby')) then

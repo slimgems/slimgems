@@ -117,7 +117,7 @@ class Gem::Dependency
     # below is also the legacy of some old restructurings.
     #
     # Note also that because of backwards compatibility (loading new
-    # gems in an old RubyGems installation), we can't add explicit
+    # gems in an old SlimGems installation), we can't add explicit
     # marshaling to this class until we want to make a big
     # break. Maybe 2.0.
     #

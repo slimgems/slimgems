@@ -19,12 +19,12 @@ class Gem::Indexer
   include Gem::UserInteraction
 
   ##
-  # Build indexes for RubyGems older than 1.2.0 when true
+  # Build indexes for SlimGems older than 1.2.0 when true
 
   attr_accessor :build_legacy
 
   ##
-  # Build indexes for RubyGems 1.2.0 and newer when true
+  # Build indexes for SlimGems 1.2.0 and newer when true
 
   attr_accessor :build_modern
 
@@ -123,7 +123,7 @@ class Gem::Indexer
   # Build various indicies
 
   def build_indicies(index)
-    # Marshal gemspecs are used by both modern and legacy RubyGems
+    # Marshal gemspecs are used by both modern and legacy SlimGems
     build_marshal_gemspecs index
     build_legacy_indicies index if @build_legacy
     build_modern_indicies index if @build_modern
@@ -133,7 +133,7 @@ class Gem::Indexer
   end
 
   ##
-  # Builds indicies for RubyGems older than 1.2.x
+  # Builds indicies for SlimGems older than 1.2.x
 
   def build_legacy_indicies(index)
     progress = ui.progress_reporter index.size,
@@ -242,7 +242,7 @@ class Gem::Indexer
   end
 
   ##
-  # Build a single index for RubyGems 1.2 and newer
+  # Build a single index for SlimGems 1.2 and newer
 
   def build_modern_index(index, file, name)
     say "Generating #{name} index"
@@ -272,7 +272,7 @@ class Gem::Indexer
   end
 
   ##
-  # Builds indicies for RubyGems 1.2 and newer. Handles full, latest, prerelease
+  # Builds indicies for SlimGems 1.2 and newer. Handles full, latest, prerelease
 
   def build_modern_indicies(index)
     build_modern_index(index.released_specs.sort, @specs_index, 'specs')
@@ -320,7 +320,7 @@ class Gem::Indexer
     <title>#{rss_title}</title>
     <link>http://#{rss_host}</link>
     <description>Recently released gems from http://#{rss_host}</description>
-    <generator>RubyGems v#{Gem::VERSION}</generator>
+    <generator>#{Gem::NAME} v#{Gem::VERSION}</generator>
     <docs>http://cyber.law.harvard.edu/rss/rss.html</docs>
         HEADER
 

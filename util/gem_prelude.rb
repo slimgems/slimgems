@@ -109,7 +109,7 @@ if defined?(Gem) then
 
     ##
     # Methods before this line will be removed when QuickLoader is replaced
-    # with the real RubyGems
+    # with the real SlimGems
 
     GEM_PRELUDE_METHODS = Gem.methods(false)
 

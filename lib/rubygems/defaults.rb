@@ -6,7 +6,7 @@ module Gem
   @pre_install_hooks    ||= []
 
   ##
-  # An Array of the default sources that come with RubyGems
+  # An Array of the default sources that come with SlimGems
 
   def self.default_sources
     %w[http://rubygems.org/]

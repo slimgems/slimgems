@@ -56,13 +56,13 @@ class Gem::Server
 
   <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <title>RubyGems Documentation Index</title>
+    <title>#{Gem::NAME} Documentation Index</title>
     <link rel="stylesheet" href="gem-server-rdoc-style.css" type="text/css" media="screen" />
   </head>
   <body>
     <div id="fileHeader">
 <%= SEARCH %>
-      <h1>RubyGems Documentation Index</h1>
+      <h1>#{Gem::NAME} Documentation Index</h1>
     </div>
     <!-- banner header -->
 
@@ -654,7 +654,7 @@ div.method-source-code pre { color: #ffdead; overflow: hidden; }
       "homepage" => "http://docs.rubygems.org/",
       "name" => 'rubygems',
       "rdoc_installed" => true,
-      "summary" => "RubyGems itself",
+      "summary" => "#{Gem::NAME} itself",
       "version" => Gem::VERSION,
     }
 

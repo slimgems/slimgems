@@ -7,7 +7,7 @@ class Gem::Commands::PushCommand < Gem::Command
   include Gem::GemcutterUtilities
 
   def description # :nodoc:
-    'Push a gem up to RubyGems.org'
+    "Push a gem up to rubygems.org"
   end
 
   def arguments # :nodoc:

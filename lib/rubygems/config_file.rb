@@ -5,10 +5,10 @@
 #++
 
 ##
-# Gem::ConfigFile RubyGems options and gem command options from ~/.gemrc.
+# Gem::ConfigFile SlimGems options and gem command options from ~/.gemrc.
 #
 # ~/.gemrc is a YAML file that uses strings to match gem command arguments and
-# symbols to match RubyGems options.
+# symbols to match SlimGems options.
 #
 # Gem command arguments use a String key that matches the command name and
 # allow you to specify default arguments:
@@ -18,7 +18,7 @@
 #
 # You can use <tt>gem:</tt> to set default arguments for all commands.
 #
-# RubyGems options use symbol keys.  Valid options are:
+# SlimGems options use symbol keys.  Valid options are:
 #
 # +:backtrace+:: See #backtrace
 # +:benchmark+:: See #benchmark
@@ -113,7 +113,7 @@ class Gem::ConfigFile
   attr_accessor :update_sources
 
   ##
-  # API key for RubyGems.org
+  # API key for SlimGems.org
 
   attr_reader :rubygems_api_key
 
@@ -187,7 +187,7 @@ class Gem::ConfigFile
   end
 
   ##
-  # Location of RubyGems.org credentials
+  # Location of SlimGems.org credentials
 
   def credentials_path
     File.join(Gem.user_home, '.gem', 'credentials')

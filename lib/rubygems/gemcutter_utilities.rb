@@ -5,7 +5,7 @@ module Gem::GemcutterUtilities
   def sign_in
     return if Gem.configuration.rubygems_api_key
 
-    say "Enter your RubyGems.org credentials."
+    say "Enter your rubygems.org credentials."
     say "Don't have an account yet? Create one at http://rubygems.org/sign_up"
 
     email    =              ask "   Email: "

@@ -7,12 +7,12 @@
 module Kernel
 
   ##
-  # The Kernel#require from before RubyGems was loaded.
+  # The Kernel#require from before SlimGems was loaded.
 
   alias gem_original_require require
 
   ##
-  # When RubyGems is required, Kernel#require is replaced with our own which
+  # When SlimGems is required, Kernel#require is replaced with our own which
   # is capable of loading gems on demand.
   #
   # When you call <tt>require 'x'</tt>, this is what happens:

@@ -19,7 +19,7 @@ class Gem::Commands::GenerateIndexCommand < Gem::Command
     end
 
     add_option '--[no-]legacy',
-               'Generate indexes for RubyGems older than',
+               "Generate indexes for #{Gem::NAME} older than",
                '1.2.0' do |value, options|
       unless options[:build_modern] or value then
         raise OptionParser::InvalidOption, 'no indicies will be built'
@@ -29,7 +29,7 @@ class Gem::Commands::GenerateIndexCommand < Gem::Command
     end
 
     add_option '--[no-]modern',
-               'Generate indexes for RubyGems newer',
+               "Generate indexes for #{Gem::NAME} newer",
                'than 1.2.0' do |value, options|
       unless options[:build_legacy] or value then
         raise OptionParser::InvalidOption, 'no indicies will be built'
@@ -86,7 +86,7 @@ When done, it will generate a set of files like this:
   prerelease_specs.<version>.gz                # prerelease specs index
   quick/Marshal.<version>/<gemname>.gemspec.rz # Marshal quick index file
 
-  # these files support legacy RubyGems
+  # these files support legacy #{Gem::NAME}
   quick/index
   quick/index.rz                               # quick index manifest
   quick/<gemname>.gemspec.rz                   # legacy YAML quick index
@@ -99,7 +99,7 @@ When done, it will generate a set of files like this:
 The .Z and .rz extension files are compressed with the inflate algorithm.
 The Marshal version number comes from ruby's Marshal::MAJOR_VERSION and
 Marshal::MINOR_VERSION constants.  It is used to ensure compatibility.
-The yaml indexes exist for legacy RubyGems clients and fallback in case of
+The yaml indexes exist for legacy #{Gem::NAME} clients and fallback in case of
 Marshal version changes.
 
 If --rss-host and --rss-gem-host are given an RSS feed will be generated at

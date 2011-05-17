@@ -1,5 +1,5 @@
 ##
-# Base exception class for RubyGems.  All exception raised by RubyGems are a
+# Base exception class for #{Gem::NAME}.  All exception raised by SlimGems are a
 # subclass of this one.
 class Gem::Exception < RuntimeError; end
 
@@ -85,7 +85,7 @@ class Gem::SystemExitException < SystemExit
   def initialize(exit_code)
     @exit_code = exit_code
 
-    super "Exiting RubyGems with exit_code #{exit_code}"
+    super "Exiting #{Gem::NAME} with exit_code #{exit_code}"
   end
 
 end

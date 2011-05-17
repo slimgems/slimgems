@@ -4,7 +4,7 @@ require 'rubygems/remote_fetcher'
 
 ##
 # A fake Gem::RemoteFetcher for use in tests or to avoid real live HTTP
-# requests when testing code that uses RubyGems.
+# requests when testing code that uses SlimGems.
 #
 # Example:
 #
@@ -12,13 +12,13 @@ require 'rubygems/remote_fetcher'
 #   @fetcher.data['http://gems.example.com/yaml'] = source_index.to_yaml
 #   Gem::RemoteFetcher.fetcher = @fetcher
 #
-#   # invoke RubyGems code
+#   # invoke SlimGems code
 #
 #   paths = @fetcher.paths
 #   assert_equal 'http://gems.example.com/yaml', paths.shift
 #   assert paths.empty?, paths.join(', ')
 #
-# See RubyGems' tests for more examples of FakeFetcher.
+# See SlimGems' tests for more examples of FakeFetcher.
 
 class Gem::FakeFetcher
 

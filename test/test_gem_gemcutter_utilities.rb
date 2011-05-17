@@ -18,7 +18,7 @@ class TestGemGemcutterUtilities < RubyGemTestCase
     api_key     = 'a5fdbb6ba150cbb83aad2bb2fede64cf040453903'
     util_sign_in [api_key, 200, 'OK']
 
-    assert_match %r{Enter your RubyGems.org credentials.}, @sign_in_ui.output
+    assert_match %r{Enter your rubygems.org credentials.}, @sign_in_ui.output
     assert @fetcher.last_request["authorization"]
     assert_match %r{Signed in.}, @sign_in_ui.output
 
@@ -30,7 +30,7 @@ class TestGemGemcutterUtilities < RubyGemTestCase
     api_key     = 'a5fdbb6ba150cbb83aad2bb2fede64cf040453903'
     util_sign_in [api_key, 200, 'OK'], 'http://example.com'
 
-    assert_match %r{Enter your RubyGems.org credentials.}, @sign_in_ui.output
+    assert_match %r{Enter your rubygems.org credentials.}, @sign_in_ui.output
     assert @fetcher.last_request["authorization"]
     assert_match %r{Signed in.}, @sign_in_ui.output
 
@@ -57,7 +57,7 @@ class TestGemGemcutterUtilities < RubyGemTestCase
     end
     util_sign_in [api_key, 200, 'OK']
 
-    assert_match %r{Enter your RubyGems.org credentials.}, @sign_in_ui.output
+    assert_match %r{Enter your rubygems.org credentials.}, @sign_in_ui.output
     assert_match %r{Signed in.}, @sign_in_ui.output
 
     credentials   = YAML.load_file Gem.configuration.credentials_path
@@ -72,7 +72,7 @@ class TestGemGemcutterUtilities < RubyGemTestCase
       util_sign_in ['Access Denied.', 403, 'Forbidden']
     end
 
-    assert_match %r{Enter your RubyGems.org credentials.}, @sign_in_ui.output
+    assert_match %r{Enter your rubygems.org credentials.}, @sign_in_ui.output
     assert_match %r{Access Denied.}, @sign_in_ui.output
   end
 

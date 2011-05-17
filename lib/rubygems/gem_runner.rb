@@ -11,7 +11,7 @@ require 'rubygems/doc_manager'
 ##
 # Run an instance of the gem program.
 #
-# Gem::GemRunner is only intended for internal use by RubyGems itself.  It
+# Gem::GemRunner is only intended for internal use by SlimGems itself.  It
 # does not form any public API and may change at any time for any reason.
 #
 # If you would like to duplicate functionality of `gem` commands, use the

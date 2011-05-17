@@ -7,7 +7,7 @@ class Gem::Commands::OwnerCommand < Gem::Command
   include Gem::GemcutterUtilities
 
   def description # :nodoc:
-    'Manage gem owners on RubyGems.org.'
+    "Manage gem owners on rubygems.org."
   end
 
   def arguments # :nodoc:
