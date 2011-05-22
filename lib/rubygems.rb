@@ -103,7 +103,8 @@ require 'thread'
 
 module Gem
   NAME = 'SlimGems'
-  SlimGemsVersion = VERSION = '1.3.8'
+  VERSION = '1.3.8'
+  SlimGemsVersion = RubyGemsVersion = VERSION
 
   ##
   # Raised when SlimGems is unable to load or activate a gem.  Contains the
