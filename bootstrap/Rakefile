@@ -1,5 +1,4 @@
 task :default => :install
-desc "Install SlimGems"
 task :install do
   require File.dirname(__FILE__) + '/../setup'
 end

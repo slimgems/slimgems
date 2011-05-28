@@ -5,9 +5,14 @@
 # See LICENSE.txt for permissions.
 #++
 
+Dir.chdir File.dirname(__FILE__)
+
 # Make sure rubygems isn't already loaded.
-if ENV['RUBYOPT'] and defined? Gem then
+if defined?(Gem)
   ENV.delete 'RUBYOPT'
+  
+  ENV['RUBYOPT'] = '--disable-gems' if RUBY_VERSION >= '1.9'
+  ENV['GEM_BOOTSTRAP'] = 'true' unless defined?(Gem::NAME)
 
   require 'rbconfig'
   config = defined?(RbConfig) ? RbConfig : Config
@@ -17,8 +22,6 @@ if ENV['RUBYOPT'] and defined? Gem then
 
   exec(ruby, 'setup.rb', *ARGV)
 end
-
-Dir.chdir File.dirname(__FILE__)
 
 $:.unshift 'lib'
 require 'rubygems'

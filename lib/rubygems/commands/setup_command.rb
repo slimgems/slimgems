@@ -3,9 +3,6 @@ require 'fileutils'
 require 'rbconfig'
 require 'tmpdir'
 
-Gem::NAME = 'SlimGems' unless defined?(Gem::NAME)
-Gem::GEM_NAME = 'slimgems' unless defined?(Gem::GEM_NAME)
-
 ##
 # Installs SlimGems itself.  This command is ordinarily only available from a
 # SlimGems checkout or tarball.
@@ -278,11 +275,11 @@ TEXT
       lib_dir = Gem::ConfigMap[site_or_vendor]
       bin_dir = Gem::ConfigMap[:bindir]
     else
-      # Apple installed #{Gem::NAME} into libdir, and SlimGems <= 1.1.0 gets
+      # Apple installed this lib into libdir, and version <= 1.1.0 gets
       # confused about installation location, so switch back to
       # sitelibdir/vendorlibdir.
       if defined?(APPLE_GEM_HOME) and
-        # just in case Apple and SlimGems don't get this patched up proper.
+        # just in case us and Apple don't get this patched up proper.
         (prefix == Gem::ConfigMap[:libdir] or
          # this one is important
          prefix == File.join(Gem::ConfigMap[:libdir], 'ruby')) then
