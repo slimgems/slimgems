@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
                     Dir.glob('*.{rdoc,txt,rb}') + 
                     ['README.md', 'Rakefile', 'ChangeLog']
   s.require_paths = ['hide_lib_for_update']
-  s.executables   = ["update_#{Gem::GEM_NAME}"]
+  s.executables   = ["update_#{PACKAGE::Gem::GEM_NAME}"]
   s.extensions    = ['bootstrap/Rakefile']
   s.test_files    = Dir.glob('test/**/*.rb')
   s.required_ruby_version = '> 1.8.3'
