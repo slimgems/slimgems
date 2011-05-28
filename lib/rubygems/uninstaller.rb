@@ -10,6 +10,24 @@ require 'rubygems/dependency_list'
 require 'rubygems/doc_manager'
 require 'rubygems/user_interaction'
 
+# Uninstalls this gem smoothly
+Gem.post_uninstall do |uninstaller|
+  if RUBY_VERSION < '1.9' && uninstaller.spec.name == Gem::GEM_NAME
+    require 'rubygems/dependency_installer'
+    uninstaller.say "Reverting to RubyGems 1.3.7 (you can gem update --system afterwards)"
+    options = Gem::DependencyInstaller::DEFAULT_OPTIONS.merge({
+      :generate_rdoc     => false,
+      :generate_ri       => false,
+      :format_executable => false,
+      :test              => false,
+      :version           => Gem::Requirement.default,
+    })
+    ui = Gem::DependencyInstaller.new(options)
+    ui.install 'rubygems-update', '= 1.3.7'
+    system "update_rubygems"
+  end
+end
+
 ##
 # An Uninstaller.
 #
