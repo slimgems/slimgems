@@ -70,10 +70,9 @@ For more details and other options, see:
 ## Uninstalling
 
 If SlimGems isn't for you, you can downgrade back to RubyGems by performing
-the following commands:
+the following intuitive command:
 
-    $ gem install rubygems-update
-    $ rubygems_update
+    $ gem uninstall slimgems
 
 Again, you might need to have administrator privileges (sudo) to run these
 commands.
