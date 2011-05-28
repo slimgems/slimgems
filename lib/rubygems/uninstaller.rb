@@ -10,21 +10,19 @@ require 'rubygems/dependency_list'
 require 'rubygems/doc_manager'
 require 'rubygems/user_interaction'
 
-# Uninstalls this gem smoothly
+# Restores RubyGems
 Gem.post_uninstall do |uninstaller|
-  if RUBY_VERSION < '1.9' && uninstaller.spec.name == Gem::GEM_NAME
-    require 'rubygems/dependency_installer'
-    uninstaller.say "Reverting to RubyGems 1.3.7 (you can gem update --system afterwards)"
-    options = Gem::DependencyInstaller::DEFAULT_OPTIONS.merge({
-      :generate_rdoc     => false,
-      :generate_ri       => false,
-      :format_executable => false,
-      :test              => false,
-      :version           => Gem::Requirement.default,
-    })
-    ui = Gem::DependencyInstaller.new(options)
-    ui.install 'rubygems-update', '= 1.3.7'
-    system "update_rubygems"
+  site_lib = File.expand_path(File.join(File.dirname(__FILE__), '..'))
+  old_lib = File.join(site_lib, 'rubygems-backup')
+  if File.directory?(old_lib)
+    uninstaller.say "Restoring RubyGems"
+    Dir.glob(File.join(old_lib, '*')).each do |file|
+      fname = File.basename(file)
+      old_file = File.join(site_lib, fname)
+      FileUtils.rm_rf(old_file) if File.exist?(old_file)
+      FileUtils.mv(file, File.join(site_lib, fname))
+    end
+    FileUtils.rm_rf(old_lib)
   end
 end
 

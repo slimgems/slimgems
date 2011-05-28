@@ -105,6 +105,8 @@ By default, this #{Gem::NAME} will install gem as:
     end
 
     lib_dir, bin_dir = make_destination_dirs install_destdir
+    
+    backup_lib lib_dir
 
     install_lib lib_dir
 
@@ -213,6 +215,17 @@ TEXT
         end
       end
     end
+  end
+  
+  def backup_lib(lib_dir)
+    return unless ENV['GEM_BOOTSTRAP']
+    backup_dir = File.join(lib_dir, 'rubygems-backup')
+    rm_rf(backup_dir) if File.directory?(backup_dir)
+    mkdir_p(backup_dir) 
+    list = %w(rubygems rubygems.rb ubygems.rb gauntlet_rubygems.rb).map do |f|
+      File.join(lib_dir, f)
+    end
+    mv(list, backup_dir)
   end
 
   def install_lib(lib_dir)
