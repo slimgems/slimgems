@@ -55,7 +55,7 @@ class TestGemCommandsUpdateCommand < RubyGemTestCase
   end
 
   def util_setup_rubygem version
-    gem = quick_gem('slimgems', version.to_s) do |s|
+    gem = quick_gem(Gem::GEM_NAME, version.to_s) do |s|
       s.files = %w[setup.rb]
     end
     write_file File.join(*%W[gems #{gem.original_name} setup.rb])
@@ -101,8 +101,8 @@ class TestGemCommandsUpdateCommand < RubyGemTestCase
     end
 
     out = @ui.output.split "\n"
-    assert_equal "Updating slimgems", out.shift
-    assert_equal "Successfully installed slimgems-9", out.shift
+    assert_equal "Updating #{Gem::GEM_NAME}", out.shift
+    assert_equal "Successfully installed #{Gem::GEM_NAME}-9", out.shift
     assert_equal "#{Gem::NAME} system software updated (9)", out.shift
 
     assert_empty out
@@ -147,8 +147,8 @@ class TestGemCommandsUpdateCommand < RubyGemTestCase
     end
 
     out = @ui.output.split "\n"
-    assert_equal "Updating slimgems", out.shift
-    assert_equal "Successfully installed slimgems-9", out.shift
+    assert_equal "Updating #{Gem::GEM_NAME}", out.shift
+    assert_equal "Successfully installed #{Gem::GEM_NAME}-9", out.shift
     assert_equal "#{Gem::NAME} system software updated (9)", out.shift
 
     assert_empty out
@@ -171,8 +171,8 @@ class TestGemCommandsUpdateCommand < RubyGemTestCase
     end
 
     out = @ui.output.split "\n"
-    assert_equal "Updating slimgems", out.shift
-    assert_equal "Successfully installed slimgems-8", out.shift
+    assert_equal "Updating #{Gem::GEM_NAME}", out.shift
+    assert_equal "Successfully installed #{Gem::GEM_NAME}-8", out.shift
     assert_equal "#{Gem::NAME} system software updated (8)", out.shift
 
     assert_empty out

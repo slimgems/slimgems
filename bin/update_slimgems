@@ -8,11 +8,11 @@
 require 'rubygems'
 
 if ARGV.include? '-h' or ARGV.include? '--help' then
-  $stderr.puts "slimgems_update [options]"
+  $stderr.puts "#{Gem::GEM_NAME}_update [options]"
   $stderr.puts
   $stderr.puts "This will install the latest version of #{Gem::NAME}."
   $stderr.puts
-  $stderr.puts "\t--version=X.Y\tUpdate slimgems from the X.Y version."
+  $stderr.puts "\t--version=X.Y\tUpdate #{Gem::GEM_NAME} from the X.Y version."
   exit
 end
 
@@ -20,14 +20,14 @@ unless ARGV.grep(/--version=([\d\.]*)/).empty? then
   exec Gem.ruby, '-S', $PROGRAM_NAME, "_#{$1}_"
 end
 
-update_specs = Gem.source_index.find_name('slimgems')
+update_specs = Gem.source_index.find_name('Gem::GEM_NAME')
 update_spec = update_specs.sort_by {|s| s.version.to_s }.last
 if update_spec.nil?
   puts "Error: Cannot find #{Gem::NAME} Update Path!"
   puts
   puts "#{Gem::NAME} has already been updated."
-  puts "The slimgems gem may now be uninstalled."
-  puts "E.g.    gem uninstall slimgems"
+  puts "The #{Gem::GEM_NAME} gem may now be uninstalled."
+  puts "E.g.    gem uninstall #{Gem::GEM_NAME}"
 else
   Dir.chdir update_spec.full_gem_path
   system(Gem.ruby, 'setup.rb', *ARGV)

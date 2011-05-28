@@ -179,8 +179,8 @@ class Gem::Installer
     end
 
     unless @spec.post_install_message.nil?
-      # Only for slimgems
-      if @spec.name == 'slimgems'
+      # Only for SlimGems
+      if @spec.name == Gem::GEM_NAME
         lines = @spec.post_install_message.split("\n")
         lines.shift if lines.first.include?("Upgraded from #{Gem::NAME}")
         say lines.join("\n")
@@ -492,7 +492,7 @@ TEXT
 
   def build_extensions
     return if @spec.extensions.empty?
-    unless @spec.name == 'slimgems'
+    unless @spec.name == Gem::GEM_NAME
       say "Building native extensions.  This could take a while..."
     end
     start_dir = Dir.pwd

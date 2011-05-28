@@ -146,11 +146,11 @@ class Gem::Commands::UpdateCommand < Gem::Command
     end
 
     rubygems_update         = Gem::Specification.new
-    rubygems_update.name    = 'slimgems'
+    rubygems_update.name    = Gem::GEM_NAME
     rubygems_update.version = version
 
     hig = {
-      'slimgems' => rubygems_update
+      Gem::GEM_NAME => rubygems_update
     }
 
     gems_to_update = which_to_update hig, options[:args]

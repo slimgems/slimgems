@@ -165,7 +165,7 @@ By default, this #{Gem::NAME} will install gem as:
     Dir.chdir 'bin' do
       bin_files = Dir['*']
 
-      bin_files.delete 'update_slimgems'
+      bin_files.delete "update_#{Gem::GEM_NAME}"
 
       bin_files.each do |bin_file|
         bin_file_formatted = if options[:format_executable] then
@@ -233,14 +233,14 @@ TEXT
 
   def install_rdoc
     gem_doc_dir = File.join Gem.dir, 'doc'
-    rubygems_name = "slimgems-#{Gem::VERSION}"
+    rubygems_name = "#{Gem::GEM_NAME}-#{Gem::VERSION}"
     rubygems_doc_dir = File.join gem_doc_dir, rubygems_name
 
     if File.writable? gem_doc_dir and
        (not File.exist? rubygems_doc_dir or
         File.writable? rubygems_doc_dir) then
       say "Removing old #{Gem::NAME} RDoc and ri" if @verbose
-      Dir[File.join(Gem.dir, 'doc', 'slimgems-[0-9]*')].each do |dir|
+      Dir[File.join(Gem.dir, 'doc', "#{Gem::GEM_NAME}-[0-9]*")].each do |dir|
         rm_rf dir
       end
       Dir[File.join(Gem.dir, 'doc', 'rubygems-[0-9]*')].each do |dir|
