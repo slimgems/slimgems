@@ -3,12 +3,15 @@ require 'fileutils'
 require 'rbconfig'
 require 'tmpdir'
 
+Gem::NAME = 'SlimGems' unless defined?(Gem::NAME)
+Gem::GEM_NAME = 'slimgems' unless defined?(Gem::GEM_NAME)
+
 ##
 # Installs SlimGems itself.  This command is ordinarily only available from a
 # SlimGems checkout or tarball.
 
 class Gem::Commands::SetupCommand < Gem::Command
-
+  
   def initialize
     super 'setup', "Install #{Gem::NAME}",
           :format_executable => true, :rdoc => true, :ri => true,

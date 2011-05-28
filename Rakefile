@@ -52,27 +52,27 @@ end
 rubinius_dir = ENV['RUBINIUS_PATH'] || '../../../git/git.rubini.us/code'
 ruby_dir     = ENV['RUBY_PATH']     || '../../ruby/trunk'
 
-desc "Updates Ruby HEAD with the currently checked-out copy of #{Gem::NAME}."
+desc "Updates Ruby HEAD with the currently checked-out copy."
 task :update_ruby do
   rsync_with ruby_dir
 end
 
-desc "Updates Rubinius HEAD with the currently checked-out copy of #{Gem::NAME}."
+desc "Updates Rubinius HEAD with the currently checked-out copy."
 task :update_rubinius do
   rsync_with rubinius_dir
 end
 
-desc "Diffs Ruby HEAD with the currently checked-out copy of #{Gem::NAME}."
+desc "Diffs Ruby HEAD with the currently checked-out copy."
 task :diff_ruby do
   diff_with ruby_dir
 end
 
-desc "Diffs Rubinius HEAD with the currently checked-out copy of #{Gem::NAME}."
+desc "Diffs Rubinius HEAD with the currently checked-out copy."
 task :diff_rubinius do
   diff_with rubinius_dir
 end
 
-desc "Get coverage for a specific test, no system #{Gem::NAME}."
+desc "Get coverage for a specific test."
 task "rcov:for", [:test] do |task, args|
   mgem  = Gem.source_index.find_name("minitest").first rescue nil
   rgem  = Gem.source_index.find_name(/rcov/).first
