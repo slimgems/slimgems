@@ -15,16 +15,18 @@ class TestGemCommandsUpdateCommand < RubyGemTestCase
     @cmd.options[:generate_ri]   = false
 
     util_setup_fake_fetcher
+    util_setup_spec_fetcher @a1, @a2, @a3a
 
     @a1_path = File.join @gemhome, 'cache', @a1.file_name
     @a2_path = File.join @gemhome, 'cache', @a2.file_name
-
-    util_setup_spec_fetcher @a1, @a2
+    @a3a_path = File.join @gemhome, 'cache', @a3a.file_name
 
     @fetcher.data["#{@gem_repo}gems/#{@a1.file_name}"] =
       read_binary @a1_path
     @fetcher.data["#{@gem_repo}gems/#{@a2.file_name}"] =
       read_binary @a2_path
+    @fetcher.data["#{@gem_repo}gems/#{@a3a.file_name}"] =
+      read_binary @a3a_path
   end
   
   def teardown
@@ -292,6 +294,27 @@ class TestGemCommandsUpdateCommand < RubyGemTestCase
     out = @ui.output.split "\n"
     assert_equal "Updating installed gems", out.shift
     assert_equal "Nothing to update", out.shift
+
+    assert_empty out
+  end
+
+  def test_execute_named_up_to_date_prerelease
+    util_clear_gems
+
+    Gem::Installer.new(@a2_path).install
+
+    @cmd.options[:args] = [@a2.name]
+    @cmd.options[:prerelease] = true
+
+    use_ui @ui do
+      @cmd.execute
+    end
+
+    out = @ui.output.split "\n"
+    assert_equal "Updating installed gems", out.shift
+    assert_equal "Updating #{@a3a.name}", out.shift
+    assert_equal "Successfully installed #{@a3a.full_name}", out.shift
+    assert_equal "Gems updated: #{@a3a.name}", out.shift
 
     assert_empty out
   end
