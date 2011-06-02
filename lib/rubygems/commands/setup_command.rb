@@ -222,10 +222,10 @@ TEXT
     backup_dir = File.join(lib_dir, 'rubygems-backup')
     rm_rf(backup_dir) if File.directory?(backup_dir)
     mkdir_p(backup_dir) 
-    list = %w(rubygems rubygems.rb ubygems.rb gauntlet_rubygems.rb).map do |f|
-      File.join(lib_dir, f)
+    %w(rubygems rubygems.rb ubygems.rb gauntlet_rubygems.rb).each do |f|
+      path = File.join(lib_dir, f)
+      mv(path, backup_dir) if File.exist?(path)
     end
-    mv(list, backup_dir)
   end
 
   def install_lib(lib_dir)
