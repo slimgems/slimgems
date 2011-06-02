@@ -121,6 +121,8 @@ By default, this #{Gem::NAME} will install gem as:
     uninstall_old_gemcutter
     
     uninstall_old_rubygems
+    
+    uninstall_old_slimgems
 
     install_rdoc
 
@@ -371,6 +373,15 @@ abort "#{deprecation_message}"
 
     ui = Gem::Uninstaller.new('gemcutter', :all => true, :ignore => true,
                               :version => '< 0.4')
+    ui.uninstall
+  rescue Gem::InstallError
+  end
+
+  def uninstall_old_slimgems
+    require 'rubygems/uninstaller'
+
+    ui = Gem::Uninstaller.new(Gem::GEM_NAME, :all => true, :ignore => true,
+                              :executables => true, :version => "< #{Gem::VERSION}")
     ui.uninstall
   rescue Gem::InstallError
   end
