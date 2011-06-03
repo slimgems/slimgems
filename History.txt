@@ -1,4 +1,10 @@
-﻿=== 1.3.9 / 2011-06-01
+﻿=== 1.3.10 / 2011-06-03
+
+SlimGems is a drop-in replacement for RubyGems. See README.md for more.
+
+* Fixes slimgems getting uninstalled when `gem uninstall GEM` is called.
+
+=== 1.3.9 / 2011-06-02
 
 SlimGems is reborn! SlimGems is a fork of RubyGems, see README.md for more.
 
