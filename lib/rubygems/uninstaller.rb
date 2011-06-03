@@ -12,6 +12,7 @@ require 'rubygems/user_interaction'
 
 # Restores RubyGems
 Gem.post_uninstall do |uninstaller|
+  next unless uninstaller.spec.name == 'slimgems'
   site_lib = File.expand_path(File.join(File.dirname(__FILE__), '..'))
   old_lib = File.join(site_lib, 'rubygems-backup')
   if File.directory?(old_lib)
