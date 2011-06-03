@@ -1,4 +1,4 @@
-﻿=== 1.3.10 / 2011-06-03
+﻿=== 1.3.9.1 / 2011-06-03
 
 SlimGems is a drop-in replacement for RubyGems. See README.md for more.
 
