@@ -2,6 +2,16 @@ require File.expand_path('../gem_installer_test_case', __FILE__)
 
 class TestGemInstaller < GemInstallerTestCase
 
+  def setup
+    super
+    @config = Gem.configuration
+  end
+
+  def teardown
+    super
+    Gem.configuration = @config
+  end
+
   def test_app_script_text
     util_make_exec '2', ''
 
@@ -815,6 +825,45 @@ load Gem.bin_path('a', 'my_exec', version)
     shebang = @installer.shebang 'my_exec'
 
     assert_equal "#!#{Gem.ruby} -ws", shebang
+  end
+
+  def test_shebang_custom
+    conf = Gem::ConfigFile.new []
+    conf[:custom_shebang] = 'test'
+
+    Gem.configuration = conf
+
+    util_make_exec '2', "#!/usr/bin/ruby"
+
+    shebang = @installer.shebang 'my_exec'
+
+    assert_equal "#!test", shebang
+  end
+
+  def test_shebang_custom_with_expands
+    conf = Gem::ConfigFile.new []
+    conf[:custom_shebang] = '1 $env 2 $ruby 3 $exec 4 $name'
+
+    Gem.configuration = conf
+
+    util_make_exec '2', "#!/usr/bin/ruby"
+
+    shebang = @installer.shebang 'my_exec'
+
+    assert_equal "#!1 /usr/bin/env 2 #{Gem.ruby} 3 my_exec 4 a", shebang
+  end
+
+  def test_shebang_custom_with_expands_and_arguments
+    conf = Gem::ConfigFile.new []
+    conf[:custom_shebang] = '1 $env 2 $ruby 3 $exec'
+
+    Gem.configuration = conf
+
+    util_make_exec '2', "#!/usr/bin/ruby -ws"
+
+    shebang = @installer.shebang 'my_exec'
+
+    assert_equal "#!1 /usr/bin/env 2 #{Gem.ruby} -ws 3 my_exec", shebang
   end
 
   def test_unpack
