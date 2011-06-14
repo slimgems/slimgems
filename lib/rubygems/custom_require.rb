@@ -36,7 +36,22 @@ module Kernel
 
     raise load_error
   end
+  
+  if RUBY_VERSION < '1.8.7'
+    undef require
+    def require(path)
+      gem_original_require path
+    rescue LoadError => load_error
+      if load_error.message.rindex(path) == load_error.message.size - path.size
+        if Gem.try_activate(path)
+          return gem_original_require(path)
+        end
+      end
 
+      raise load_error
+    end
+  end
+  
   private :require
   private :gem_original_require
 
