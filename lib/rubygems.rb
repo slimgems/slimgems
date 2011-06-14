@@ -7,7 +7,9 @@ gem_disabled = !defined? Gem
 
 unless gem_disabled
   # Nuke the Quickloader stuff
-  Gem::QuickLoader.remove if defined?(Gem::QuickLoader)
+  if defined?(Gem::QuickLoader) && Gem::QuickLoader.respond_to?(:remove)
+    Gem::QuickLoader.remove
+  end
 end
 
 require 'rubygems/defaults'
