@@ -201,7 +201,7 @@ class Gem::DependencyList
   # +ignored+.
 
   def active_count(specs, ignored)
-    specs.count { |spec| ignored[spec.full_name].nil? }
+    specs.inject(0) {|c, spec| ignored[spec.full_name].nil? ? c + 1 : c }
   end
 
 end
