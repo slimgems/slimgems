@@ -1,5 +1,13 @@
 require File.expand_path('../gemutilities', __FILE__)
-require 'rubygems/gem_runner'
+
+module Gem
+  class << self
+    alias old_load_plugins load_plugins
+    def load_plugins; end
+    require 'rubygems/gem_runner'
+    alias load_plugins old_load_plugins
+  end
+end
 
 class TestGemGemRunner < RubyGemTestCase
 

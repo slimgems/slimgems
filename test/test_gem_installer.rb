@@ -1,15 +1,29 @@
 require File.expand_path('../gem_installer_test_case', __FILE__)
 
 class TestGemInstaller < GemInstallerTestCase
-
+  
+  class StubbedConfigFile < Gem::ConfigFile
+    def load_file(filename) {} end
+  end
+  
   def setup
     super
-    @config = Gem.configuration
+    if !defined?(@@test_num)
+      @@test_num = 0
+      @@total_tests = self.class.test_methods.size
+      @@config = Gem.configuration
+    end
+    Gem.configuration = StubbedConfigFile.new([])
   end
-
-  def teardown
-    super
-    Gem.configuration = @config
+  
+  def run(runner)
+    result = super
+  ensure
+    @@test_num += 1
+    if @@test_num == @@total_tests
+      Gem.configuration = @@config
+    end
+    result
   end
 
   def test_app_script_text
@@ -828,10 +842,7 @@ load Gem.bin_path('a', 'my_exec', version)
   end
 
   def test_shebang_custom
-    conf = Gem::ConfigFile.new []
-    conf[:custom_shebang] = 'test'
-
-    Gem.configuration = conf
+    Gem.configuration[:custom_shebang] = 'test'
 
     util_make_exec '2', "#!/usr/bin/ruby"
 
@@ -841,10 +852,7 @@ load Gem.bin_path('a', 'my_exec', version)
   end
 
   def test_shebang_custom_with_expands
-    conf = Gem::ConfigFile.new []
-    conf[:custom_shebang] = '1 $env 2 $ruby 3 $exec 4 $name'
-
-    Gem.configuration = conf
+    Gem.configuration[:custom_shebang] = '1 $env 2 $ruby 3 $exec 4 $name'
 
     util_make_exec '2', "#!/usr/bin/ruby"
 
@@ -854,10 +862,7 @@ load Gem.bin_path('a', 'my_exec', version)
   end
 
   def test_shebang_custom_with_expands_and_arguments
-    conf = Gem::ConfigFile.new []
-    conf[:custom_shebang] = '1 $env 2 $ruby 3 $exec'
-
-    Gem.configuration = conf
+    Gem.configuration[:custom_shebang] = '1 $env 2 $ruby 3 $exec'
 
     util_make_exec '2', "#!/usr/bin/ruby -ws"
 
