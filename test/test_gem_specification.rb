@@ -177,6 +177,30 @@ end
     @a2.files.clear
   end
 
+  def test_self_load_utf8_with_ascii_encoding
+    int_enc = Encoding.default_internal
+    Encoding.default_internal = 'US-ASCII'
+    
+    spec2 = @a2.dup
+    bin = "\u5678"
+    full_path = nil
+    write_file spec2.spec_name do |io|
+      full_path = io.path
+      io.write spec2.to_ruby.force_encoding('BINARY').sub("\\u{5678}", bin.force_encoding('BINARY'))
+    end
+
+    begin
+      spec = Gem::Specification.load full_path
+      assert true
+    rescue Encoding::UndefinedConversionError => e
+      assert false, "raised encoding conversion error: #{e}"
+    end
+
+    assert_equal spec2, spec
+  ensure
+    Encoding.default_internal = int_enc
+  end if defined?(Encoding)
+
   def test_self_load_legacy_ruby
     spec = eval LEGACY_RUBY_SPEC
     assert_equal 'keyedlist', spec.name

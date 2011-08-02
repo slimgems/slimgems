@@ -504,7 +504,11 @@ class Gem::Specification
     gemspec = nil
     raise "NESTED Specification.load calls not allowed!" if @@gather
     @@gather = proc { |gs| gemspec = gs }
-    data = File.read filename
+    if defined? Encoding
+      data = File.read filename, :mode => 'r:UTF-8:-'
+    else
+      data = File.read filename
+    end
     eval data, nil, filename
     gemspec
   ensure
