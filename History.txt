@@ -1,4 +1,11 @@
-﻿=== 1.3.9.1 / 2011-06-03
+﻿=== 1.3.9.3 / 2011-09-07
+
+SlimGems is a drop-in replacement for RubyGems. See README.md for more.
+
+* Add support for Ruby 1.9.3 preview release (#9)
+* Fix rubygems-pwn gem install remote execution vulnerability (#10)
+
+=== 1.3.9.1, 1.3.9.2 / 2011-06-03
 
 SlimGems is a drop-in replacement for RubyGems. See README.md for more.
 

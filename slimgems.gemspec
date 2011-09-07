@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.summary       = "#{PACKAGE::Gem::NAME} is a package management framework for Ruby"
   s.description   = <<-eof
 SlimGems is a drop-in replacement for RubyGems, a package management framework 
-for Ruby. We forked the project at 1.3.7, which was a great stable release.
+for Ruby. This project was forked at 1.3.7, which was a great stable release.
 
 SlimGems focuses on maintaining a sane and stable API. We believe that the
 project has been put through enough stress testing by the community to lock
