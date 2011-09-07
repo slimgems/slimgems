@@ -1227,9 +1227,7 @@ end
 # if --disable-rubygems was used, then the prelude wasn't loaded, so
 # we need to load the custom_require now.
 
-if gem_disabled
-  require 'rubygems/custom_require'
-end
+require 'rubygems/custom_require'
 
 Gem.clear_paths
 
