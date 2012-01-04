@@ -149,12 +149,16 @@ class Gem::DependencyInstaller
           results = find_gems_with_sources(dep).reverse
 
           results.reject! do |dep_spec,|
-            to_do.push dep_spec
+            dep_met = @source_index.any? do |_, installed_spec|
+                        dep.name == installed_spec.name and
+                          dep.requirement.satisfied_by? installed_spec.version
+                      end
 
-            @source_index.any? do |_, installed_spec|
-              dep.name == installed_spec.name and
-                dep.requirement.satisfied_by? installed_spec.version
+            if !dep_met
+              to_do.push dep_spec
             end
+
+            dep_met
           end
 
           results.each do |dep_spec, source_uri|
