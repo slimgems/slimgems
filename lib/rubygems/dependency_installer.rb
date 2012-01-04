@@ -149,13 +149,23 @@ class Gem::DependencyInstaller
           results = find_gems_with_sources(dep).reverse
 
           results.reject! do |dep_spec,|
-            dep_met = @source_index.any? do |_, installed_spec|
-                        dep.name == installed_spec.name and
-                          dep.requirement.satisfied_by? installed_spec.version
-                      end
+            dep_met = false
+            installed_dep_spec = nil
 
+            @source_index.each do |_, installed_spec|
+              if (dep.name == installed_spec.name) && (dep.requirement.satisfied_by?(installed_spec.version))
+                installed_dep_spec = installed_spec
+                dep_met = true
+              end
+            end
+            
             if !dep_met
               to_do.push dep_spec
+            else
+              # Since we resolve dependencies transitively, if this installed
+              # gem is missing some dependencies, go ahead and try to do it,
+              # but for this exact version.
+              to_do.push installed_dep_spec
             end
 
             dep_met
