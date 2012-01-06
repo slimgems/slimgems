@@ -92,7 +92,7 @@ class Gem::SourceIndex
                   end.untaint
 
       begin
-        gemspec = eval spec_code, binding, file_name
+        gemspec = eval spec_code, nil, file_name
 
         if gemspec.is_a?(Gem::Specification)
           gemspec.loaded_from = file_name
