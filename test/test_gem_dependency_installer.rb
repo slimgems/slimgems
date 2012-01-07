@@ -147,6 +147,34 @@ class TestGemDependencyInstaller < RubyGemTestCase
 
     assert_equal %w[b-1], inst.installed_gems.map { |s| s.full_name }
   end
+  
+  def test_install_dependencies_earliest_satisfied
+    r1, r1_gem = util_gem 'r', '1'
+    q1, q1_gem = util_gem 'q', '1'
+    q2, q2_gem = util_gem 'q', '2' do |s|
+      s.add_dependency 'r'
+    end
+    e1, e1_gem = util_gem 'e', '1' do |s|
+      s.add_dependency 'q', '>= 1'
+    end
+
+    FileUtils.rm_rf File.join(@gemhome, 'gems')
+    Gem.source_index.refresh!
+
+    FileUtils.mv e1_gem, @tempdir # not in index
+    FileUtils.mv q1_gem, @tempdir # not in index
+    FileUtils.mv q2_gem, @tempdir # not in index
+    FileUtils.mv r1_gem, @tempdir # not in index
+
+    Dir.chdir @tempdir do
+      inst = Gem::DependencyInstaller.new
+      inst.install 'q-1'
+      inst.install 'e-1'
+    end
+
+    installed = Gem::SourceIndex.from_installed_gems.map { |n,s| s.full_name }
+    assert_equal %w[e-1 q-1], installed
+  end
 
   def test_install_dependency
     FileUtils.mv @a1_gem, @tempdir
