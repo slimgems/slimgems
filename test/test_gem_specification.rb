@@ -132,46 +132,49 @@ end
   def test_self_load_escape_curly
     @a2.name = 'a};raise "improper escaping";%q{'
 
-    full_path = @a2.spec_file
-    write_file full_path do |io|
-      io.write @a2.to_ruby_for_cache
+    full_path = nil
+    write_file @a2.spec_name do |io|
+      full_path = io.path
+      io.write @a2.to_ruby
     end
 
     spec = Gem::Specification.load full_path
 
-    @a2.files.clear
-
     assert_equal @a2, spec
+
+    @a2.files.clear
   end
 
   def test_self_load_escape_interpolation
     @a2.name = 'a#{raise %<improper escaping>}'
 
-    full_path = @a2.spec_file
-    write_file full_path do |io|
-      io.write @a2.to_ruby_for_cache
+    full_path = nil
+    write_file @a2.spec_name do |io|
+      full_path = io.path
+      io.write @a2.to_ruby
     end
 
     spec = Gem::Specification.load full_path
 
-    @a2.files.clear
-
     assert_equal @a2, spec
+
+    @a2.files.clear
   end
 
   def test_self_load_escape_quote
     @a2.name = 'a";raise "improper escaping";"'
 
-    full_path = @a2.spec_file
-    write_file full_path do |io|
-      io.write @a2.to_ruby_for_cache
+    full_path = nil
+    write_file @a2.spec_name do |io|
+      full_path = io.path
+      io.write @a2.to_ruby
     end
 
     spec = Gem::Specification.load full_path
 
-    @a2.files.clear
-
     assert_equal @a2, spec
+
+    @a2.files.clear
   end
 
   def test_self_load_legacy_ruby
