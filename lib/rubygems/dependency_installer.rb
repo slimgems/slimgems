@@ -156,6 +156,7 @@ class Gem::DependencyInstaller
               if (dep.name == installed_spec.name) && (dep.requirement.satisfied_by?(installed_spec.version))
                 installed_dep_spec = installed_spec
                 dep_met = true
+                break
               end
             end
             
