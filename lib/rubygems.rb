@@ -106,7 +106,7 @@ require 'thread'
 module Gem
   NAME = 'SlimGems'
   GEM_NAME = 'slimgems'
-  VERSION = '1.3.9.3'
+  VERSION = '1.3.9.4'
   SlimGemsVersion = RubyGemsVersion = VERSION
 
   ##
