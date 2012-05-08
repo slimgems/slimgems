@@ -106,7 +106,7 @@ require 'thread'
 module Gem
   NAME = 'SlimGems'
   GEM_NAME = 'slimgems'
-  VERSION = '1.3.9.4'
+  VERSION = '1.3.9.5'
   SlimGemsVersion = RubyGemsVersion = VERSION
 
   ##
@@ -633,24 +633,54 @@ module Gem
   ##
   # Loads YAML, preferring Psych
 
+@yaml_loaded = false
+
+  ##
+  # Loads YAML, preferring Psych
+
   def self.load_yaml
-    begin
-      require 'psych' unless ENV['TEST_SYCK']
-    rescue ::LoadError
-    ensure
-      require 'yaml'
+    return if @yaml_loaded
+
+    test_syck = ENV['TEST_SYCK']
+
+    unless test_syck
+      begin
+        gem 'psych', '~> 1.2', '>= 1.2.1'
+      rescue Gem::LoadError
+        # It's OK if the user does not have the psych gem installed.  We will
+        # attempt to require the stdlib version
+      end
+
+      begin
+        # Try requiring the gem version *or* stdlib version of psych.
+        require 'psych'
+      rescue ::LoadError
+        # If we can't load psych, thats fine, go on.
+      else
+        # If 'yaml' has already been required, then we have to
+        # be sure to switch it over to the newly loaded psych.
+        if defined?(YAML::ENGINE) && YAML::ENGINE.yamler != "psych"
+          YAML::ENGINE.yamler = "psych"
+        end
+
+        require 'rubygems/psych_additions'
+        require 'rubygems/psych_tree'
+      end
     end
 
-    # Hack to handle syck's DefaultKey bug with psych.
-    # See the note at the top of lib/rubygems/requirement.rb for
-    # why we end up defining DefaultKey more than once.
-    if !defined? YAML::Syck
-      YAML.module_eval do
-          const_set 'Syck', Module.new {
-            const_set 'DefaultKey', Class.new
-          }
-        end
+    require 'yaml'
+
+    # If we're supposed to be using syck, then we may have to force
+    # activate it via the YAML::ENGINE API.
+    if test_syck and defined?(YAML::ENGINE)
+      YAML::ENGINE.yamler = "syck" unless YAML::ENGINE.syck?
     end
+
+    # Now that we're sure some kind of yaml library is loaded, pull
+    # in our hack to deal with Syck's DefaultKey ugliness.
+    require 'rubygems/syck_hack'
+
+    @yaml_loaded = true
   end
 
   ##
