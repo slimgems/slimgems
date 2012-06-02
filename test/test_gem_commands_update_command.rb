@@ -5,7 +5,7 @@ class TestGemCommandsUpdateCommand < RubyGemTestCase
 
   def setup
     super
-    
+
     @oldpath = Dir.pwd
     Dir.chdir(File.dirname(__FILE__))
 
@@ -28,12 +28,12 @@ class TestGemCommandsUpdateCommand < RubyGemTestCase
     @fetcher.data["#{@gem_repo}gems/#{@a3a.file_name}"] =
       read_binary @a3a_path
   end
-  
+
   def teardown
     super
     Dir.chdir(@oldpath)
   end
-  
+
   def test_execute
     util_clear_gems
 
@@ -341,11 +341,11 @@ class TestGemCommandsUpdateCommand < RubyGemTestCase
     @cmd.handle_options %w[--system]
 
     expected = {
-      :generate_ri   => true,
+      :generate_ri   => false,
       :system        => true,
       :force         => false,
       :args          => [],
-      :generate_rdoc => true,
+      :generate_rdoc => false,
       :test          => false,
     }
 
@@ -362,11 +362,11 @@ class TestGemCommandsUpdateCommand < RubyGemTestCase
     @cmd.handle_options %w[--system 1.3.7]
 
     expected = {
-      :generate_ri   => true,
+      :generate_ri   => false,
       :system        => "1.3.7",
       :force         => false,
       :args          => [],
-      :generate_rdoc => true,
+      :generate_rdoc => false,
       :test          => false,
     }
 

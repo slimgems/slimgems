@@ -55,7 +55,7 @@ class TestGemCommandManager < RubyGemTestCase
       #check defaults
       @command_manager.process_args("install")
       assert_equal false, check_options[:test]
-      assert_equal true, check_options[:generate_rdoc]
+      assert_equal false, check_options[:generate_rdoc]
       assert_equal false, check_options[:force]
       assert_equal :both, check_options[:domain]
       assert_equal true, check_options[:wrappers]
@@ -192,7 +192,7 @@ class TestGemCommandManager < RubyGemTestCase
 
     #check defaults
     @command_manager.process_args("update")
-    assert_equal true, check_options[:generate_rdoc]
+    assert_equal false, check_options[:generate_rdoc]
 
     #check settings
     check_options = nil
